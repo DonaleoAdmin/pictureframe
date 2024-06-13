@@ -1,4 +1,0 @@
-This is the first line.
-This is the new line
-This is the last line.
-os.system("feh -Y -x -q -z -D 7 --auto-rotate -B black -F -Z -r  /media/")
