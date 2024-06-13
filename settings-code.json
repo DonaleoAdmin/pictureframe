@@ -1,0 +1,12 @@
+{
+    "autoZoom": "-Z",
+    "autoRotate": "--auto-rotate",
+    "borderless": "-x",
+    "fullscreen": "-F",
+    "hidePointer": "-Y",
+    "imageBackground": "-B",
+    "hideError": "-q",
+    "randomise": "-z",
+    "delayInSecond": "-D",
+    "recursive": "-r"
+}

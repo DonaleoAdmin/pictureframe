@@ -1,0 +1,52 @@
+const express = require("express");
+const path = require("path");
+// const http = require('http');
+const bodyParser = require("body-parser");
+
+const index = require("./routes/index");
+const app = express();
+
+// view engine setup
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
+
+// Middleware to parse JSON bodies
+app.use(bodyParser.json());
+
+// set path for static assets
+app.use(express.static(path.join(__dirname, "public")));
+app.use("/css", express.static(__dirname + "/public/css"));
+app.use("/img", express.static(__dirname + "/public/img"));
+app.use("/js", express.static(__dirname + "/public/js"));
+app.use("/css", express.static(__dirname + "/node_modules/bootstrap/dist/css"));
+app.use("/js", express.static(__dirname + "/node_modules/bootstrap/dist/js"));
+app.use("/font", express.static(__dirname + "/node_modules/bootstrap-icons/font"));
+app.use("/font", express.static(__dirname + "/node_modules/bootstrap-icons/font"));
+app.use("/icons", express.static(__dirname + "/node_modules/bootstrap-icons/icons"));
+
+// set routes
+app.use("/", index);
+
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+  var err = new Error("Not Found");
+  err.status = 404;
+  next(err);
+});
+
+// error handler
+app.use(function (err, req, res, next) {
+  // render the error page
+  res.status(err.status || 500);
+  res.render("error", { status: err.status, message: err.message });
+});
+
+// const port = process.env.PORT || 3000;
+// app.listen(port, () => console.log(`Listening on port ${port}...`));
+// // app.set('port', port);
+
+// app.get('/', (req, res) => {
+//     res.send('Hello World');
+// })
+
+module.exports = app;
