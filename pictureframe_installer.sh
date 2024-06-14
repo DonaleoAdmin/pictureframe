@@ -50,9 +50,9 @@ sudo npm install
 # Edit wayfire.ini and append new lines
 # Define the lines to be appended
 new_lines="[autostart]
-1 = python3 ~/pictureframe/slideshow.py
-2 = sudo chmod +x ~/pictureframe/pictureframe.sh
-3 = ~/pictureframe/pictureframe.sh"
+1 = sudo chmod +x ~/pictureframe/pictureframe.sh
+2 = ~/pictureframe/pictureframe.sh"
+3 = python3 ~/pictureframe/slideshow.py
 
 # Remove existing [autostart] section if it exists
 sudo sed -i '/^\[autostart\]/,/^$/d' ~/.config/wayfire.ini
@@ -96,4 +96,5 @@ sudo systemctl restart nginx
 # Display completion message
 echo "Installation and setup complete!"
 
-echo "Please run: sudo reboot"
+# Restarting device
+sudo reboot
