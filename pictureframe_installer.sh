@@ -46,7 +46,6 @@ cd pictureframe
 # Install npm dependencies
 echo "Installing npm dependencies..."
 sudo npm install
-npm run start
 
 # Edit wayfire.ini and append new lines
 # Define the lines to be appended
@@ -88,5 +87,10 @@ EOF'
 echo "Restarting Nginx..."
 sudo systemctl restart nginx
 
+# echo "Starting PictureFrame..."
+# npm run start
+
 # Display completion message
 echo "Installation and setup complete!"
+
+echo "Please run: sudo reboot"
