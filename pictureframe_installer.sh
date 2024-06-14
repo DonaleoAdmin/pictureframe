@@ -54,6 +54,9 @@ new_lines="[autostart]
 2 = sudo chmod +x ~/pictureframe/pictureframe.sh
 3 = ~/pictureframe/pictureframe.sh"
 
+# Remove existing [autostart] section if it exists
+sudo sed -i '/^\[autostart\]/,/^$/d' ~/.config/wayfire.ini
+
 # Append the new lines to wayfire.ini
 echo "$new_lines" | sudo tee -a ~/.config/wayfire.ini > /dev/null
 
