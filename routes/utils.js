@@ -5,31 +5,6 @@ const path = require("path");
 const dataPath = "./settings.json";
 const codePath = "./settings-code.json";
 
-// getSubdirectories = (parentDir, callback) => {
-//   fs.readdir(parentDir, (err, files) => {
-//     if (err) return callback(err);
-
-//     const subdirs = [];
-//     let pending = files.length;
-
-//     // No files/directories found
-//     if (!pending) {
-//       return callback(null, subdirs);
-//     }
-
-//     files.forEach((file) => {
-//       const filePath = path.join(parentDir, file);
-//       fs.stat(filePath, (err, stats) => {
-//         if (err) return callback(err);
-//         // Handle directory
-//         if (stats.isDirectory()) subdirs.push(file);
-//         // Handle callback
-//         if (!--pending) callback(null, subdirs);
-//       });
-//     });
-//   });
-// };
-
 function getSubdirectories(parentDir) {
   return new Promise((resolve, reject) => {
     fs.readdir(parentDir, (err, files) => {
