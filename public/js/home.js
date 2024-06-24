@@ -2,19 +2,40 @@ $(document).ready(function () {
   toggleInput();
 });
 
-function updateInput(event) {
+async function updateInput(event, loadFdr = false) {
   const id = event.target.id;
   let inputValue = null;
   if (event.target.type === "checkbox") inputValue = event.target.checked;
   else inputValue = event.target.value;
 
   // Send the input value to the server
-  fetch("/update", {
+  await fetch("/update", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ key: id, value: inputValue }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Success:", data);
+      if (loadFdr) loadFolders(id);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
+
+function updateFolder(event, id, isLocal) {
+  const inputValue = event.target.checked;
+
+  // Send the input value to the server
+  fetch("/updateFolder", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ id: id, value: inputValue, isLocal: isLocal }),
   })
     .then((response) => response.json())
     .then((data) => {
@@ -25,21 +46,69 @@ function updateInput(event) {
     });
 }
 
-function rebootDevice(event) {
-    fetch("/reboot", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: "",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Success:", data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
+function loadFolders(id) {
+  console.log("loading folders...");
+  // reload();
+  fetch("/syncFolders", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("data", data);
+      let subdirsContainer = "localSubdirsContainer";
+      let subdirsName = "localSubdirs";
+      let inputId = "localFolder_";
+      if (data.mediaSource === "usb") {
+        subdirsContainer = "usbSubdirsContainer";
+        subdirsName = "usbSubdirs";
+        inputId = "usbFolder_";
+      }
+
+      const container = document.getElementById(subdirsContainer);
+      container.innerHTML = ""; // Clear existing content
+
+      data[subdirsName].forEach((subdir) => {
+        const subdirElement = document.createElement("div");
+        subdirElement.className = "form-check form-switch";
+        subdirElement.innerHTML = `
+          <input class="form-check-input" type="checkbox" role="switch" id="${inputId}${
+          subdir.id
+        }" ${subdir.show ? "checked" : ""} oninput="updateFolder(event, ${
+          subdir.id
+        }, true)">
+          <label class="form-check-label" for="${inputId}${
+          subdir.id
+        }"><i class="bi bi-folder-plus"></i> ${subdir.name}</label>
+        `;
+        container.appendChild(subdirElement);
       });
+
+      console.log("Successfully synced up folders");
+      //data.mediaSource
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
+
+function rebootDevice(event) {
+  fetch("/reboot", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: "",
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Success:", data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
 }
 
 function stopSlideshow(event) {
@@ -84,10 +153,14 @@ function toggleInput() {
   if (!selectElement) return;
 
   if (selectElement.value === "usb") {
-    usbContainer.style.display = "";
+    usbContainer.style.display = "block";
     localContainer.style.display = "none";
   } else {
-    localContainer.style.display = "";
+    localContainer.style.display = "block";
     usbContainer.style.display = "none";
   }
+}
+
+function reload(id) {
+  window.location.href = "/";
 }

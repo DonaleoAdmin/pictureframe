@@ -2,41 +2,53 @@ const express = require("express");
 const { exec } = require("child_process");
 const settingsRoutes = express.Router();
 const fs = require("fs");
-const { getSettings, saveSettings, encodeSettings, getIPAddress, stopSlideshow, rebootDevice, startSlideshow } = require("./utils");
+const {
+  getSettings,
+  saveSettings,
+  updateFolderSettings,
+  loadSubdirectories,
+  encodeSettings,
+  getIPAddress,
+  stopSlideshow,
+  rebootDevice,
+  startSlideshow,
+} = require("./utils");
 const { updateSlide } = require("./slideshow");
 
 const dataPath = "./settings.json";
 
 // reading the data
 settingsRoutes.get("/settings", (req, res) => {
-  fs.readFile(dataPath, "utf8", (err, data) => {
-    if (err) {
-      throw err;
-    }
-    res.send(JSON.parse(data));
-  });
+  const currSettings = getSettings();
+  res.send(currSettings);
 });
 
 // saving changes
 settingsRoutes.post("/update", (req, res) => {
   const currSettings = getSettings();
-  fs.readFile(
-    dataPath,
-    "utf8",
-    (err, data) => {
-      //  const value = req.params['key'];
-      const key = req.body.key;
-      const value = req.body.value;
+  const key = req.body.key;
+  const value = req.body.value;
 
-      currSettings[key] = value;
-      saveSettings(currSettings);
-      const replacementText = encodeSettings(false);
-      // console.log(replacementText);
-      updateSlide(replacementText);
-      res.send(currSettings);
-    },
-    true
-  );
+  currSettings[key] = value;
+  saveSettings(currSettings);
+  const replacementText = encodeSettings(false);
+  // console.log(replacementText);
+  updateSlide(replacementText);
+  res.send(currSettings);
+});
+
+settingsRoutes.post("/updateFolder", (req, res) => {
+  const id = req.body.id;
+  const value = req.body.value;
+  const isLocal = req.body.isLocal;
+
+  updateFolderSettings(id, value, isLocal);
+  res.send({ id: id, show: value });
+});
+
+settingsRoutes.get("/syncFolders", async (req, res) => {
+  const data = await loadSubdirectories();
+  res.send(data);
 });
 
 settingsRoutes.post("/reboot", (req, res) => {

@@ -94,7 +94,11 @@ footer {
     letter-spacing: 2px;
 }
 
-.text-dark-md, .text-dark-md .input-group-text {
+.text-dark-md, .text-dark-md .input-group-text, .accordion-button {
     font-weight: 500 !important;
     letter-spacing: 1px;
+}
+
+.accordion {
+  padding-bottom: 20px !important;
 }

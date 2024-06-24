@@ -66,7 +66,7 @@
   </div>
   <div class="input-group mb-3">
     <label class="input-group-text col-7" for="mediaSource"><i class="bi bi-usb-symbol"></i> Media Source</label>
-    <select class="form-select" id="mediaSource" oninput="updateInput(event); toggleInput()" >
+    <select class="form-select" id="mediaSource" oninput="updateInput(event, true); toggleInput()" >
       <% for (var i = 0; i < items.sources.length; i++) { %>
       <option value=<%= items.sources[i].toLowerCase() %> 
         <%= items.mediaSource == items.sources[i].toLowerCase() ? "selected" : "" %>>
@@ -74,15 +74,63 @@
       <% } %>
     </select>
   </div>
-  <div class="input-group mb-3" id="usbContainer" style="display: none;">
-    <span class="input-group-text col-7"><i class="bi bi-usb-drive"></i> Usb Location</span>
-    <input type="text" class="form-control" id="usbLocation" placeholder="Enter a path" 
-      value=<%= items.usbLocation %> oninput="updateInput(event)">
+  <div id="usbContainer" style="display: none;">
+    <div class="input-group mb-3" >
+      <span class="input-group-text col-7"><i class="bi bi-usb-drive"></i> Usb Location</span>
+      <input type="text" class="form-control" id="usbLocation" placeholder="Enter a path" 
+        value=<%= items.usbLocation %> onchange="updateInput(event, true)">
+    </div>
+    <div class="accordion">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#usbPlaylist" aria-expanded="true" aria-controls="usbPlaylist">
+            <i class="bi bi-images"></i>&nbsp;Playlist Folders
+          </button>
+        </h2>
+        <div id="usbPlaylist" class="accordion-collapse collapse" data-bs-parent="#accordionUsb">
+          <div class="accordion-body">
+            <div id="usbSubdirsContainer">
+              <% for (var i = 0; i < items.usbSubdirs.length; i++) { %>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="usbFolder_<%= items.usbSubdirs[i].id %>" 
+                  <%= items.usbSubdirs[i].show ? "checked" : "" %> oninput="updateFolder(event, <%= items.usbSubdirs[i].id %>, false)">
+                <label class="form-check-label" for="usbFolder_<%= items.usbSubdirs[i].id %>"><i class="bi bi-folder-plus"></i> <%= items.usbSubdirs[i].name %></label>
+              </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="input-group mb-3" id="localContainer" style="display: none;">
-    <span class="input-group-text col-7"><i class="bi bi-folder2-open"></i>  Local Location</span>
-    <input type="text" class="form-control" id="localLocation" placeholder="Enter a path" 
-      value=<%= items.localLocation %> oninput="updateInput(event)">
+  <div id="localContainer" style="display: none;">
+    <div class="input-group mb-3">
+      <span class="input-group-text col-7"><i class="bi bi-folder2-open"></i>  Local Location</span>
+      <input type="text" class="form-control" id="localLocation" placeholder="Enter a path" 
+        value=<%= items.localLocation %> onchange="updateInput(event, true)">
+    </div>
+    <div class="accordion">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#localPlaylist" aria-expanded="true" aria-controls="localPlaylist">
+            <i class="bi bi-images"></i>&nbsp;Playlist Folders
+          </button>
+        </h2>
+        <div id="localPlaylist" class="accordion-collapse collapse" data-bs-parent="#accordionLocal">
+          <div class="accordion-body">
+            <div id="localSubdirsContainer">
+              <% for (var i = 0; i < items.localSubdirs.length; i++) { %>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="localFolder_<%= items.localSubdirs[i].id %>" 
+                  <%= items.localSubdirs[i].show ? "checked" : "" %> oninput="updateFolder(event, <%= items.localSubdirs[i].id %>, true)">
+                <label class="form-check-label" for="localFolder_<%= items.localSubdirs[i].id %>"><i class="bi bi-folder-plus"></i> <%= items.localSubdirs[i].name %></label>
+              </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="row g-3 align-items-center" id="actionContainer">
     <button type="button" onclick="restartSlideshow(event)" class="btn btn-primary text-dark-md"><i class="bi bi-bootstrap-reboot"></i> Restart</button>

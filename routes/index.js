@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const fs = require("fs");
-const { getSettings, saveSettings } = require("./utils");
+const { getSettings, saveSettings, loadSubdirectories } = require("./utils");
 const settings = require("./settings");
 
 router.use(settings);
 
 /* GET home page. */
-router.get("/", function (req, res, next) {
-  const content = getSettings();
+router.get("/", async function (req, res, next) {
+  const content = await loadSubdirectories(); //getSettings();
   res.render("index", { page: "Settings", menuId: "home", items: content });
 });
 
