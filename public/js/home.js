@@ -57,7 +57,7 @@ function loadFolders(id) {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log("data", data);
+      // console.log("data", data);
       let subdirsContainer = "localSubdirsContainer";
       let subdirsName = "localSubdirs";
       let inputId = "localFolder_";
@@ -85,6 +85,13 @@ function loadFolders(id) {
         `;
         container.appendChild(subdirElement);
       });
+
+      if (data[subdirsName].length < 1) {
+        const emptyElement = document.createElement("div");
+        emptyElement.className = "alert alert-danger";
+        emptyElement.innerHTML = "No Folders Found...";
+        container.appendChild(emptyElement);
+      }
 
       console.log("Successfully synced up folders");
       //data.mediaSource
@@ -149,15 +156,30 @@ function toggleInput() {
   const selectElement = document.getElementById("mediaSource");
   const usbContainer = document.getElementById("usbContainer");
   const localContainer = document.getElementById("localContainer");
+  let subdirsContainer = "localSubdirsContainer";
+  let subdir = "localSubdirs";
 
   if (!selectElement) return;
 
   if (selectElement.value === "usb") {
     usbContainer.style.display = "block";
     localContainer.style.display = "none";
+    subdirsContainer = "usbSubdirsContainer";
+    subdir = "usbSubdirs";
   } else {
     localContainer.style.display = "block";
     usbContainer.style.display = "none";
+  }
+
+  const container = document.getElementById(subdirsContainer);
+  container.innerHTML = ""; // Clear existing content
+  const formCheckElem = container.querySelector(".form-check");
+
+  if (!formCheckElem) {
+    const emptyElement = document.createElement("div");
+    emptyElement.className = "alert alert-danger";
+    emptyElement.innerHTML = "No Folders Found...";
+    container.appendChild(emptyElement);
   }
 }
 
