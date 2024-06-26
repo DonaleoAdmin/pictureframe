@@ -176,7 +176,7 @@ module.exports = {
         " "
       )} -f -`;
     } else {
-      encodedArr.push(jsonData[parentDir]);
+      encodedArr.push(parentDir);
       commandTxt = `${encodedArr.join(" ")}`;
     }
 
