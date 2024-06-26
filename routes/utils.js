@@ -172,7 +172,7 @@ module.exports = {
       }
       commandTxt = `find ${parentDir} \\( ${excludeArr.join(
         " -o "
-      )} \\) -prune -o -type f -name '*.jpg' -print / ${encodedArr.join(" ")}`;
+      )} \\) -prune -o -type f -name '*.jpg' -print | ${encodedArr.join(" ")}`;
     } else {
       encodedArr.push(jsonData[parentDir]);
       commandTxt = `${encodedArr.join(" ")}`;
