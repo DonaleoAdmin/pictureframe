@@ -28,7 +28,7 @@ async function updateInput(event, loadFdr = false) {
 
 function updateFolder(event, id, isLocal) {
   const inputValue = event.target.checked;
-
+  console.log("Calling updateFolder");
   // Send the input value to the server
   fetch("/updateFolder", {
     method: "POST",
@@ -172,10 +172,9 @@ function toggleInput() {
   }
 
   const container = document.getElementById(subdirsContainer);
-  container.innerHTML = ""; // Clear existing content
   const formCheckElem = container.querySelector(".form-check");
 
-  if (!formCheckElem) {
+  if (formCheckElem === null) {
     const emptyElement = document.createElement("div");
     emptyElement.className = "alert alert-danger";
     emptyElement.innerHTML = "No Folders Found...";

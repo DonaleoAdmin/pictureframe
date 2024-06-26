@@ -18,31 +18,39 @@ const { updateSlide } = require("./slideshow");
 const dataPath = "./settings.json";
 
 // reading the data
-settingsRoutes.get("/settings", (req, res) => {
-  const currSettings = getSettings();
+settingsRoutes.get("/settings", async (req, res) => {
+  const currSettings = await getSettings();
   res.send(currSettings);
 });
 
 // saving changes
-settingsRoutes.post("/update", (req, res) => {
-  const currSettings = getSettings();
+settingsRoutes.post("/update", async (req, res) => {
+  const currSettings = await getSettings();
   const key = req.body.key;
   const value = req.body.value;
 
   currSettings[key] = value;
-  saveSettings(currSettings);
-  const replacementText = encodeSettings(false);
-  // console.log(replacementText);
-  updateSlide(replacementText);
+  await saveSettings(currSettings);
+  const replacementText = await encodeSettings(false);
+  console.log(replacementText);
+  await updateSlide(replacementText);
   res.send(currSettings);
 });
 
-settingsRoutes.post("/updateFolder", (req, res) => {
-  const id = req.body.id;
-  const value = req.body.value;
-  const isLocal = req.body.isLocal;
+settingsRoutes.post("/updateFolder", async (req, res) => {
+  const { id, value, isLocal } = req.body;
 
-  updateFolderSettings(id, value, isLocal);
+  // Update folder settings
+  await updateFolderSettings(id, value, isLocal);
+
+  // Get the replacement text after settings have been updated
+  const replacementText = await encodeSettings(false);
+  console.log(replacementText);
+
+  // Update the slide with the new replacement text
+  await updateSlide(replacementText);
+
+  // Send the response back to the client
   res.send({ id: id, show: value });
 });
 

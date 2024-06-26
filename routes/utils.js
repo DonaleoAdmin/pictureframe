@@ -1,99 +1,90 @@
 const { exec } = require("child_process");
-const fs = require("fs");
+const fs = require("fs").promises;
 const os = require("os");
 const path = require("path");
 const dataPath = "./settings.json";
 const codePath = "./settings-code.json";
 
-function getSubdirectories(parentDir) {
-  return new Promise((resolve, reject) => {
-    fs.readdir(parentDir, (err, files) => {
-      if (err) {
-        return reject(err);
+async function getSubdirectories(parentDir) {
+  try {
+    const files = await fs.readdir(parentDir);
+    const subdirs = [];
+
+    for (const file of files) {
+      const filePath = path.join(parentDir, file);
+      const stats = await fs.stat(filePath);
+
+      if (stats.isDirectory()) {
+        subdirs.push(file);
       }
+    }
 
-      const subdirs = [];
-      let pending = files.length;
+    return subdirs;
+  } catch (err) {
+    console.log("Error:", err);
+  }
+}
 
-      if (!pending) {
-        // no files/directories found
-        return resolve(subdirs);
-      }
-
-      files.forEach((file) => {
-        const filePath = path.join(parentDir, file);
-
-        fs.stat(filePath, (err, stats) => {
-          if (err) {
-            return reject(err);
-          }
-
-          if (stats.isDirectory()) {
-            subdirs.push(file);
-          }
-
-          if (!--pending) {
-            resolve(subdirs);
-          }
-        });
-      });
-    });
+function addDirectoryWithSpace(inputPath) {
+  const splitArr = inputPath.split("/");
+  const quotedItems = splitArr.map((item) => {
+    if (item.includes(" ")) {
+      return `'${item}'`;
+    }
+    return item;
   });
+
+  return quotedItems.join("/");
 }
 
 module.exports = {
-  getSettings: () => {
-    const jsonData = fs.readFileSync(dataPath);
-    return JSON.parse(jsonData);
+  getSettings: async () => {
+    // const jsonData = fs.readFileSync(dataPath);
+    // return JSON.parse(jsonData);
+    const data = await fs.readFile(dataPath, "utf8");
+    return JSON.parse(data);
   },
 
-  saveSettings: (data) => {
+  saveSettings: async (data) => {
     const stringData = JSON.stringify(data);
-    fs.writeFileSync(dataPath, stringData);
+    // fs.writeFileSync(dataPath, stringData);
+    await fs.writeFile(dataPath, stringData, "utf8");
   },
 
-  updateFolderSettings: (id, newValue, isLocal) => {
-    // Read the JSON file
-    fs.readFile(dataPath, "utf8", (err, data) => {
-      if (err) {
-        console.error("Error reading the JSON file:", err);
-        return;
-      }
+  updateFolderSettings: async (id, newValue, isLocal) => {
+    try {
+      // Read the JSON file
+      const data = await fs.readFile(dataPath, "utf8");
 
       // Parse the JSON data
       const jsonData = JSON.parse(data);
 
       // Update specific folder
-      let folder = "";
-      if (isLocal) folder = jsonData.localSubdirs.find((f) => f.id === id);
-      else folder = jsonData.usbSubdirs.find((f) => f.id === id);
+      let folder;
+      if (isLocal) {
+        folder = jsonData.localSubdirs.find((f) => f.id === id);
+      } else {
+        folder = jsonData.usbSubdirs.find((f) => f.id === id);
+      }
 
       if (folder) {
-        folder.show =
-          newValue == null || newValue === undefined ? true : newValue;
+        folder.show = newValue == null ? true : newValue;
       } else {
         console.log("Folder not found");
         return;
       }
 
       // Write the updated data back to the JSON file
-      fs.writeFile(
-        dataPath,
-        JSON.stringify(jsonData, null, 2),
-        "utf8",
-        (err) => {
-          if (err) {
-            console.error("Error writing file:", err);
-          } else {
-            console.log("Folder has been updated");
-          }
-        }
-      );
-    });
+      await fs.writeFile(dataPath, JSON.stringify(jsonData, null, 2), "utf8");
+      console.log("Folder has been updated...", folder);
+    } catch (err) {
+      console.error("Error processing the JSON file:", err);
+    }
   },
 
   loadSubdirectories: async () => {
-    const data = fs.readFileSync(dataPath);
+    // const data = fs.readFileSync(dataPath);
+    const data = await fs.readFile(dataPath, "utf8");
     const jsonData = JSON.parse(data);
 
     let parentDir = "";
@@ -114,7 +105,7 @@ module.exports = {
       const subdirs = await getSubdirectories(parentDir);
       const folders = [];
 
-      for (let i = 0; i < subdirs.length; i++) {
+      for (let i = 0; i < subdirs?.length; i++) {
         const name = subdirs[i];
         const currFolder = currDirs.find(
           (d) => d.name.toLowerCase() === name.toLowerCase()
@@ -125,7 +116,8 @@ module.exports = {
       }
 
       jsonData[node] = folders;
-      fs.writeFileSync(dataPath, JSON.stringify(jsonData));
+      // fs.writeFileSync(dataPath, JSON.stringify(jsonData));
+      await fs.writeFile(dataPath, JSON.stringify(jsonData), "utf8");
       return jsonData;
     } catch (err) {
       console.log("Error:", err);
@@ -133,12 +125,14 @@ module.exports = {
     }
   },
 
-  encodeSettings: (partial = false) => {
+  encodeSettings: async (partial = false) => {
     let encodedArr = ["feh"];
-    const data = fs.readFileSync(dataPath);
+    // const data = fs.readFileSync(dataPath);
+    const data = await fs.readFile(dataPath, "utf8");
     const jsonData = JSON.parse(data);
 
-    const codes = fs.readFileSync(codePath);
+    // const codes = fs.readFileSync(codePath);
+    const codes = await fs.readFile(codePath, "utf8");
     const jsonCodes = JSON.parse(codes);
 
     const entries = Object.entries(jsonData);
@@ -152,13 +146,48 @@ module.exports = {
     });
 
     // console.log(jsonData);
-    if (jsonData["mediaSource"] === "usb")
-      encodedArr.push(jsonData["usbLocation"]);
-    else encodedArr.push(jsonData["localLocation"]);
+    let parentPath = jsonData.localLocation;
+    let subdirs = jsonData.localSubdirs;
+    if (jsonData["mediaSource"] === "usb") {
+      //encodedArr.push(jsonData["usbLocation"]);
+      parentPath = jsonData.usbLocation;
+      subdirs = jsonData.usbSubdirs;
+    } else {
+      //encodedArr.push(jsonData["localLocation"]);
+    }
+
+    parentPath = parentPath.replace(/\/$/, ""); // Replace the trailing slash if it exists
+    const parentDir = addDirectoryWithSpace(parentPath);
+    let excludeArr = [];
+    let commandTxt = "";
+    const hasExclusion = subdirs.some((d) => d.show === false);
+    if (hasExclusion) {
+      for (let i = 0; i < subdirs.length; i++) {
+        const dir = subdirs[i];
+        if (dir.show === false) {
+          const name = addDirectoryWithSpace(dir.name);
+          const str = `-path ${parentDir}/${name}`;
+          excludeArr.push(str);
+        }
+      }
+      commandTxt = `find ${parentDir} \\( ${excludeArr.join(
+        " -o "
+      )} \\) -prune -o -type f -name '*.jpg' -print / ${encodedArr.join(" ")}`;
+    } else {
+      encodedArr.push(jsonData[parentDir]);
+      commandTxt = `${encodedArr.join(" ")}`;
+    }
+
+    // find /home/pi/pictures \( -path /home/pi/pictures/exclude1 -o -path /home/pi/pictures/exclude2 \) -prune -o -type f -name '*.jpg' -print | feh --slideshow-delay 5 -f -
 
     // console.log(encodedArr.join(" "));
-    if (!partial) return "os.system('" + encodedArr.join(" ") + "')";
-    else return encodedArr.join(" ");
+    // if (!partial) return "os.system('" + encodedArr.join(" ") + "')";
+    // else return encodedArr.join(" ");
+    if (!partial) {
+      return `os.system("${commandTxt}")`;
+    } else {
+      return commandTxt;
+    }
   },
 
   stopSlideshow: () => {
