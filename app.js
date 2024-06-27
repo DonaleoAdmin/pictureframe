@@ -15,14 +15,29 @@ app.use(bodyParser.json());
 
 // set path for static assets
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/css", express.static(__dirname + "/public/css"));
-app.use("/img", express.static(__dirname + "/public/img"));
-app.use("/js", express.static(__dirname + "/public/js"));
-app.use("/css", express.static(__dirname + "/node_modules/bootstrap/dist/css"));
-app.use("/js", express.static(__dirname + "/node_modules/bootstrap/dist/js"));
-app.use("/font", express.static(__dirname + "/node_modules/bootstrap-icons/font"));
-app.use("/font", express.static(__dirname + "/node_modules/bootstrap-icons/font"));
-app.use("/icons", express.static(__dirname + "/node_modules/bootstrap-icons/icons"));
+app.use("/css", express.static(path.join(__dirname, "/public/css")));
+app.use("/img", express.static(path.join(__dirname, "/public/img")));
+app.use("/js", express.static(path.join(__dirname, "/public/js")));
+app.use(
+  "/css",
+  express.static(path.join(__dirname, "/node_modules/bootstrap/dist/css"))
+);
+app.use(
+  "/js",
+  express.static(path.join(__dirname, "/node_modules/bootstrap/dist/js"))
+);
+app.use(
+  "/font",
+  express.static(path.join(__dirname, "/node_modules/bootstrap-icons/font"))
+);
+app.use(
+  "/font",
+  express.static(path.join(__dirname + "/node_modules/bootstrap-icons/font"))
+);
+app.use(
+  "/icons",
+  express.static(path.join(__dirname + "/node_modules/bootstrap-icons/icons"))
+);
 
 // set routes
 app.use("/", index);
