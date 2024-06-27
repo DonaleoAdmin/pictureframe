@@ -205,7 +205,7 @@ module.exports = {
   },
 
   startSlideshow: (commandTxt) => {
-    console.log(commandTxt);
+    // console.log(commandTxt);
     exec(commandTxt, (error, stdout, stderr) => {
       if (error) {
         console.error(`Error starting slideshow process: ${error}`);

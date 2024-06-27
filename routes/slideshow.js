@@ -14,7 +14,7 @@ const filePath = path.join(__dirname, "../slideshow.py");
 module.exports = {
   updateSlide: async (replacementText) => {
     // Read the file content
-    console.log(filePath);
+    // console.log(filePath);
     fs.readFile(filePath, "utf8", (err, data) => {
       if (err) {
         console.error("Error reading the file:", err);

@@ -10,10 +10,6 @@ sudo apt-get install feh
 # Install xscreensaver
 sudo apt-get install xscreensaver
 
-# Install Nginx
-echo "Installing Nginx..."
-sudo apt-get install nginx -y
-
 # Install Node.js and npm
 echo "Installing Node.js and npm..."
 curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
@@ -63,6 +59,11 @@ echo "$new_lines" | sudo tee -a ~/.config/wayfire.ini > /dev/null
 # Display a message indicating the completion of the task
 echo "Commands successfully appended to wayfire.ini"
 
+# Install Nginx
+echo "Installing Nginx..."
+sudo apt update
+sudo apt install nginx -y
+
 # Set up Nginx configuration
 echo "Setting up Nginx configuration..."
 sudo bash -c 'cat <<EOF > /etc/nginx/sites-available/default
@@ -88,7 +89,7 @@ EOF'
 
 # Restart Nginx to apply the changes
 echo "Restarting Nginx..."
-sudo systemctl restart nginx
+# sudo systemctl restart nginx
 
 # echo "Starting PictureFrame..."
 # npm run start

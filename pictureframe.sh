@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Starting NGINX server
-sudo /etc/init.d/nginx start
+# sudo /etc/init.d/nginx start
+sudo systemctl restart nginx
 
 # Navigate to the project directory
 cd /home/pi/pictureframe
