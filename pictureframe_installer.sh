@@ -91,8 +91,8 @@ cd pictureframe
 echo "Installing npm dependencies..."
 npm install
 
-# echo "Starting PictureFrame..."
-# npm run start
+echo "Starting PictureFrame..."
+npm run start
 
 # Display completion message
 echo "Installation and setup complete!"
