@@ -13,11 +13,7 @@ sudo apt-get install xscreensaver
 # Install Node.js and npm
 echo "Installing Node.js and npm..."
 curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-sudo apt-get install -y nodejs
-
-# Install Nodemon
-echo "Installing Nodemon..."
-npm i nodemon
+sudo apt install -y nodejs npm
 
 # Clone the web application repository
 echo "Cloning the web application repository..."
@@ -42,6 +38,10 @@ cd pictureframe
 # Install npm dependencies
 echo "Installing npm dependencies..."
 sudo npm install
+
+# Install Nodemon
+echo "Installing Nodemon..."
+npm install nodemon
 
 # Edit wayfire.ini and append new lines
 # Define the lines to be appended

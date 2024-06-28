@@ -15,9 +15,10 @@ app.use(bodyParser.json());
 
 // set path for static assets
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/css", express.static(path.join(__dirname, "/public/css")));
-app.use("/img", express.static(path.join(__dirname, "/public/img")));
-app.use("/js", express.static(path.join(__dirname, "/public/js")));
+app.use("/node_modules", express.static(path.join(__dirname, "node_modules")));
+// app.use("/css", express.static(path.join(__dirname, "/public/css")));
+// app.use("/img", express.static(path.join(__dirname, "/public/img")));
+// app.use("/js", express.static(path.join(__dirname, "/public/js")));
 app.use(
   "/css",
   express.static(path.join(__dirname, "/node_modules/bootstrap/dist/css"))
