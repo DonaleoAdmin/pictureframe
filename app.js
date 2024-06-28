@@ -20,11 +20,11 @@ app.use("/node_modules", express.static(path.join(__dirname, "node_modules")));
 // app.use("/img", express.static(path.join(__dirname, "/public/img")));
 // app.use("/js", express.static(path.join(__dirname, "/public/js")));
 app.use(
-  "/css",
+  "/btcss",
   express.static(path.join(__dirname, "/node_modules/bootstrap/dist/css"))
 );
 app.use(
-  "/js",
+  "/btjs",
   express.static(path.join(__dirname, "/node_modules/bootstrap/dist/js"))
 );
 app.use(
