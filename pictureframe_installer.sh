@@ -47,8 +47,8 @@ npm install nodemon
 # Define the lines to be appended
 new_lines="[autostart]
 1 = sudo chmod +x ~/pictureframe/pictureframe.sh
-2 = ~/pictureframe/pictureframe.sh"
-3 = python3 ~/pictureframe/slideshow.py
+2 = ~/pictureframe/pictureframe.sh
+3 = python3 ~/pictureframe/slideshow.py"
 
 # Remove existing [autostart] section if it exists
 sudo sed -i '/^\[autostart\]/,/^$/d' ~/.config/wayfire.ini
