@@ -32,21 +32,14 @@ sudo chown -R "$CURRENT_USER":"$CURRENT_USER" "$TARGET_DIR"
 
 echo "Repository cloned and ownership changed to $CURRENT_USER."
 
-# Change to the web app directory
-cd pictureframe
-
-# Install npm dependencies
-echo "Installing npm dependencies..."
-npm install
-
 # Install Nodemon
-echo "Installing Nodemon..."
-npm install nodemon
+# echo "Installing Nodemon..."
+# npm install nodemon
 
 # Edit wayfire.ini and append new lines
 # Define the lines to be appended
 new_lines="[autostart]
-1 = sudo chmod +x ~/pictureframe/pictureframe.sh
+1 = chmod +x ~/pictureframe/pictureframe.sh
 2 = ~/pictureframe/pictureframe.sh
 3 = python3 ~/pictureframe/slideshow.py"
 
@@ -88,8 +81,15 @@ EOF'
 # sudo rm /etc/nginx/sites-enabled/default
 
 # Restart Nginx to apply the changes
-echo "Restarting Nginx..."
+# echo "Restarting Nginx..."
 # sudo systemctl restart nginx
+
+# Change to the web app directory
+cd pictureframe
+
+# Install npm dependencies
+echo "Installing npm dependencies..."
+npm install
 
 # echo "Starting PictureFrame..."
 # npm run start

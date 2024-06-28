@@ -42,3 +42,5 @@ echo "Removing entries in the wayfire.ini..."
 sudo sed -i '/^\[autostart\]/,/^$/d' ~/.config/wayfire.ini
 
 echo "Uninstallation of the PictureFrame app and related componments have been completed."
+echo "The system will reboot now!"
+sudo reboot
