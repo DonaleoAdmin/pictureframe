@@ -85,17 +85,22 @@ EOF'
 # sudo systemctl restart nginx
 
 # Change to the web app directory
-cd pictureframe
+echo "Change directory to pictureframe..."
+cd pictureframe || { echo "Failed to change directory to pictureframe"; exit 1; }
 
 # Install npm dependencies
 echo "Installing npm dependencies..."
-npm install
+npm install || { echo "npm install failed"; exit 1; }
 
-echo "Starting PictureFrame..."
-npm run start
+# Granting permission for scripts
+echo "Granting permission for pictureframe.sh..."
+chmod +x pictureframe.sh
+
+# echo "Starting PictureFrame..."
+# npm run start || { echo "npm run start failed"; exit 1; }
 
 # Display completion message
 echo "Installation and setup complete!"
 
 # Restarting device
-sudo reboot
+sudo reboot || { echo "sudo reboot failed"; exit 1; }
