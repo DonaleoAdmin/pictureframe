@@ -6,7 +6,7 @@ sudo systemctl stop nginx
 
 # Purge Nginx:
 echo "Purging Nginx..."
-sudo apt purge nginx nginx-common nginx-full -y
+sudo apt purge nginx nginx-common nginx-full
 
 # Remove Nginx Directories:
 echo "Removing Nginx Directories..."
@@ -33,6 +33,7 @@ sudo apt remove xscreensaver -y
 
 # Remove feh
 echo "Removing feh..."
+pkill feh
 sudo apt remove feh -y
 
 # Remove entries in the wayfire.ini
