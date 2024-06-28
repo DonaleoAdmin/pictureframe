@@ -74,10 +74,10 @@ settingsRoutes.post("/stop", (req, res) => {
   res.send("Stopping...");
 });
 
-settingsRoutes.post("/restart", (req, res) => {
+settingsRoutes.post("/restart", async (req, res) => {
   stopSlideshow();
-  const commandTxt = encodeSettings(true);
-  setTimeout(() => {}, 1000);
+  const commandTxt = await encodeSettings(true);
+  // setTimeout(() => {}, 1000);
   startSlideshow(commandTxt);
   res.send("Restarting...");
 });
