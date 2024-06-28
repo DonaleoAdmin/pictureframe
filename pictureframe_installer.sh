@@ -12,8 +12,8 @@ sudo apt-get install xscreensaver
 
 # Install Node.js and npm
 echo "Installing Node.js and npm..."
-curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-sudo apt install -y nodejs npm
+# curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+sudo apt install nodejs
 
 # Clone the web application repository
 echo "Cloning the web application repository..."

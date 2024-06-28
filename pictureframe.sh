@@ -5,7 +5,7 @@ sudo /etc/init.d/nginx start
 # sudo systemctl restart nginx
 
 # Navigate to the project directory
-cd /home/pi/pictureframe
+cd pictureframe
 
 # Run the npm start command
 npm run start

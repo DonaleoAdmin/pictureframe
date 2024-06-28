@@ -6,7 +6,7 @@ sudo systemctl stop nginx
 
 # Purge Nginx:
 echo "Purging Nginx..."
-sudo apt purge nginx nginx-common nginx-full
+sudo apt purge nginx nginx-common nginx-full -y
 
 # Remove Nginx Directories:
 echo "Removing Nginx Directories..."
