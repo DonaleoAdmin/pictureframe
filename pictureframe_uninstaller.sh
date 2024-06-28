@@ -21,6 +21,10 @@ sudo apt autoremove
 
 # Remove NodeJS
 echo "Removing NodeJS"
+sudo rm -r node_modules
+sudo rm package.json
+sudo rm package-lock.json
+sudo rm slideshow.py
 sudo apt remove nodejs -y
 
 # Remove PictureFrame app and services
