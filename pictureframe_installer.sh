@@ -37,7 +37,7 @@ cd pictureframe
 
 # Install npm dependencies
 echo "Installing npm dependencies..."
-sudo npm install
+npm install
 
 # Install Nodemon
 echo "Installing Nodemon..."
