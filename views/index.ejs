@@ -109,7 +109,7 @@
       <input type="text" class="form-control" id="localLocation" placeholder="Enter a path" 
         value=<%= items.localLocation %> onchange="updateInput(event, true)">
     </div>
-    <div class="accordion">
+    <div class="accordion ">
       <div class="accordion-item">
         <h2 class="accordion-header">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#localPlaylist" aria-expanded="true" aria-controls="localPlaylist">
@@ -124,6 +124,30 @@
                 <input class="form-check-input" type="checkbox" role="switch" id="localFolder_<%= items.localSubdirs[i].id %>" 
                   <%= items.localSubdirs[i].show ? "checked" : "" %> oninput="updateFolder(event, <%= items.localSubdirs[i].id %>, true)">
                 <label class="form-check-label" for="localFolder_<%= items.localSubdirs[i].id %>"><i class="bi bi-folder-plus"></i> <%= items.localSubdirs[i].name %></label>
+              </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="fileTypesContainer">
+    <div class="accordion ">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fileTypes" aria-expanded="true" aria-controls="fileTypes">
+            <i class="bi bi-file-earmark-person"></i>&nbsp;Image File Extensions
+          </button>
+        </h2>
+        <div id="fileTypes" class="accordion-collapse collapse" data-bs-parent="#accordionFileTypes">
+          <div class="accordion-body">
+            <div id="supportedFileTypesContainer">
+              <% for (var i = 0; i < items.imageTypes.length; i++) { %>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="fileType_<%= items.imageTypes[i].id %>" 
+                  <%= items.imageTypes[i].show ? "checked" : "" %> oninput="updateFileType(event, <%= items.imageTypes[i].id %>)">
+                <label class="form-check-label" for="fileType_<%= items.imageTypes[i].id %>"><i class="bi <%= items.imageTypes[i].css %>"></i> <%= items.imageTypes[i].name %></label>
               </div>
               <% } %>
             </div>

@@ -25,6 +25,44 @@ async function getSubdirectories(parentDir) {
   }
 }
 
+async function parseExclusionDirString(subdirs, parentDir) {
+  const excludeArr = [];
+  const hasExclusion = subdirs.some((d) => d.show === false);
+  if (hasExclusion) {
+    for (let i = 0; i < subdirs.length; i++) {
+      const dir = subdirs[i];
+      if (dir.show === false) {
+        const name = addDirectoryWithSpace(dir.name);
+        const str = `-path ${parentDir}/${name}`;
+        excludeArr.push(str);
+      }
+    }
+    const results = `\\( ${excludeArr.join(" -o ")} \\) -prune -o`;
+    return results;
+  } else {
+    return [];
+  }
+}
+
+async function parseFileTypeString(jsonData) {
+  const fileTypes = jsonData.imageTypes;
+  const hasOther = fileTypes.some((f) => f.show === true && f.id !== 1);
+  // const hasOnlyJpg = !hasOther && fileTypes.find((f) => f.id === 1);
+
+  // \( -name '*.jpg' -o -name '*.png' \)
+  const typeArr = [];
+  if (hasOther) {
+    for (let i = 0; i < fileTypes.length; i++) {
+      const item = fileTypes[i];
+      if (item.show) typeArr.push(`-name '*${item.name}'`);
+    }
+    const results = `\\( ${typeArr.join(" -o ")} \\)`;
+    return results;
+  } else {
+    return [];
+  }
+}
+
 function addDirectoryWithSpace(inputPath) {
   const splitArr = inputPath.split("/");
   const quotedItems = splitArr.map((item) => {
@@ -68,7 +106,7 @@ module.exports = {
       }
 
       if (folder) {
-        folder.show = newValue == null ? true : newValue;
+        folder.show = newValue === null ? true : newValue;
       } else {
         console.log("Folder not found");
         return;
@@ -78,7 +116,27 @@ module.exports = {
       await fs.writeFile(dataPath, JSON.stringify(jsonData, null, 2), "utf8");
       console.log("Folder has been updated...", folder);
     } catch (err) {
-      console.error("Error processing the JSON file:", err);
+      console.error("Error updating folder:", err);
+    }
+  },
+
+  updateFileType: async (id, newValue) => {
+    try {
+      const data = await fs.readFile(dataPath, "utf8");
+      const jsonData = JSON.parse(data);
+
+      const fileType = jsonData.imageTypes.find((t) => t.id === id);
+      if (fileType) {
+        fileType.show = newValue === null ? true : newValue;
+      } else {
+        console.log("Image type not found");
+        return;
+      }
+
+      await fs.writeFile(dataPath, JSON.stringify(jsonData, null, 2), "utf8");
+      console.log("File type has been updated...", fileType);
+    } catch (err) {
+      console.error("Error updating file type:", err);
     }
   },
 
@@ -149,30 +207,22 @@ module.exports = {
     let parentPath = jsonData.localLocation;
     let subdirs = jsonData.localSubdirs;
     if (jsonData["mediaSource"] === "usb") {
-      //encodedArr.push(jsonData["usbLocation"]);
       parentPath = jsonData.usbLocation;
       subdirs = jsonData.usbSubdirs;
-    } else {
-      //encodedArr.push(jsonData["localLocation"]);
     }
 
     parentPath = parentPath.replace(/\/$/, ""); // Replace the trailing slash if it exists
     const parentDir = addDirectoryWithSpace(parentPath);
-    let excludeArr = [];
+    const excludedDirStr = await parseExclusionDirString(subdirs, parentDir);
+    let fileTypeStr = await parseFileTypeString(jsonData);
     let commandTxt = "";
-    const hasExclusion = subdirs.some((d) => d.show === false);
-    if (hasExclusion) {
-      for (let i = 0; i < subdirs.length; i++) {
-        const dir = subdirs[i];
-        if (dir.show === false) {
-          const name = addDirectoryWithSpace(dir.name);
-          const str = `-path ${parentDir}/${name}`;
-          excludeArr.push(str);
-        }
-      }
-      commandTxt = `find ${parentDir} \\( ${excludeArr.join(
-        " -o "
-      )} \\) -prune -o -type f -name '*.jpg' -print | ${encodedArr.join(
+
+    const hasExclusion = excludedDirStr.length > 0;
+    const hasOtherFileType = fileTypeStr.length > 0;
+
+    if (hasExclusion || hasOtherFileType) {
+      fileTypeStr = fileTypeStr.length > 0 ? fileTypeStr : "-name '*.jpg'";
+      commandTxt = `find ${parentDir} ${excludedDirStr} -type f ${fileTypeStr} -print | ${encodedArr.join(
         " "
       )} -f -`;
     } else {
@@ -181,10 +231,8 @@ module.exports = {
     }
 
     // find /home/pi/pictures \( -path /home/pi/pictures/exclude1 -o -path /home/pi/pictures/exclude2 \) -prune -o -type f -name '*.jpg' -print | feh --slideshow-delay 5 -f -
+    // find "$MAIN_DIR" \( -path "$EXCLUDE_DIR1" -o -path "$EXCLUDE_DIR2" \) -prune -o -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.gif' -o -iname '*.bmp' -o -iname '*.tiff' \) -print | feh --slideshow-delay 5 --fullscreen --randomize --auto-zoom -f -
 
-    // console.log(encodedArr.join(" "));
-    // if (!partial) return "os.system('" + encodedArr.join(" ") + "')";
-    // else return encodedArr.join(" ");
     if (!partial) {
       return `os.system("${commandTxt}")`;
     } else {

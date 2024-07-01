@@ -6,6 +6,7 @@ const {
   getSettings,
   saveSettings,
   updateFolderSettings,
+  updateFileType,
   loadSubdirectories,
   encodeSettings,
   getIPAddress,
@@ -51,6 +52,22 @@ settingsRoutes.post("/updateFolder", async (req, res) => {
   await updateSlide(replacementText);
 
   // Send the response back to the client
+  res.send({ id: id, show: value });
+});
+
+settingsRoutes.post("/updateFileType", async (req, res) => {
+  const { id, value } = req.body;
+
+  // Update file type settings
+  await updateFileType(id, value);
+
+  // Get the replacement text after settings have been updated
+  const replacementText = await encodeSettings(false);
+  console.log(replacementText);
+
+  // Update the slide with the new replacement text
+  await updateSlide(replacementText);
+
   res.send({ id: id, show: value });
 });
 

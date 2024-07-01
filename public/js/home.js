@@ -2,53 +2,34 @@ $(document).ready(function () {
   toggleInput();
 });
 
-async function updateInput(event, loadFdr = false) {
+function updateInput(event, loadFdr = false) {
   const id = event.target.id;
   let inputValue = null;
   if (event.target.type === "checkbox") inputValue = event.target.checked;
   else inputValue = event.target.value;
 
   // Send the input value to the server
-  await fetch("/update", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ key: id, value: inputValue }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Success:", data);
-      if (loadFdr) loadFolders(id);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+  executeApi("/update", "POST", { key: id, value: inputValue }, loadFdr);
 }
 
 function updateFolder(event, id, isLocal) {
   const inputValue = event.target.checked;
   console.log("Calling updateFolder");
-  // Send the input value to the server
-  fetch("/updateFolder", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ id: id, value: inputValue, isLocal: isLocal }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Success:", data);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+  executeApi("/updateFolder", "POST", {
+    id: id,
+    value: inputValue,
+    isLocal: isLocal,
+  });
+}
+
+function updateFileType(event, id) {
+  const inputValue = event.target.checked;
+  console.log("Calling updateFileType");
+  executeApi("/updateFileType", "POST", { id: id, value: inputValue });
 }
 
 function loadFolders(id) {
   console.log("loading folders...");
-  // reload();
   fetch("/syncFolders", {
     method: "GET",
     headers: {
@@ -102,54 +83,15 @@ function loadFolders(id) {
 }
 
 function rebootDevice(event) {
-  fetch("/reboot", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: "",
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Success:", data);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+  executeApi("/reboot", "POST", "");
 }
 
 function stopSlideshow(event) {
-  fetch("/stop", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: "",
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Success:", data);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+  executeApi("/stop", "POST", "");
 }
 
 function restartSlideshow(event) {
-  fetch("/restart", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: "",
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Success:", data);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+  executeApi("/restart", "POST", "");
 }
 
 function toggleInput() {
@@ -180,6 +122,25 @@ function toggleInput() {
     emptyElement.innerHTML = "No Folders Found...";
     container.appendChild(emptyElement);
   }
+}
+
+// uri: /updateFolder, method: POST, data: { id: id, value: someValue }
+function executeApi(uri, method, data, isLoadFdr = false) {
+  fetch(uri, {
+    method: method,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: data ? JSON.stringify(data) : "",
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Success:", data);
+      if (isLoadFdr) loadFolders(data.id);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
 }
 
 function reload(id) {
