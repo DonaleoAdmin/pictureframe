@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <% include partials/head %> 
+</head>
+<body>
+<% include partials/menu %>
+
+<div class="container-fluid bg-3 text-center">    
+  <h3><%= page %></h3><br>
+</div>
+<form class="container-fluid col-sm-5 bg-3 text-dark-md" id="uploadForm" enctype="multipart/form-data">
+    <div id="uploadStatus" class="text-center"></div>
+    <div class="input-group mb-3">
+        <label class="input-group-text col-5" for="images"><i class="bi bi-search"></i> &nbsp;Choose Files</label>
+        <span class="form-control">No file selected</span>   
+        <input class="input-group-text form-control visually-hidden" type="file" id="images" name="images" accept=".jpg, .jpeg, .png, .gif, .bmp, .tiff" multiple required>
+    </div>
+    <div class="input-group mb-3">
+        <label class="input-group-text col-5" for="directory"><i class="bi bi-folder"></i> &nbsp;Upload To Folder</label><br>
+        <input class="form-control" type="text" id="directory" name="directory" value="<%= defaultDir %>" required>
+    </div>
+    <div class="row g-0 align-items-center">
+        <button type="button" onclick="uploadImages()" class="btn btn-primary text-dark-md"><i class="bi bi-save"></i> &nbsp;Upload</button>
+    </div>
+</form>
+<% include partials/footer %>
+</body>
+<% include partials/script %>
+</html>

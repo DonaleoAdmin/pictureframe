@@ -140,6 +140,13 @@ module.exports = {
     }
   },
 
+  getDefaultDir: async () => {
+    const data = await fs.readFile(dataPath, "utf8");
+    const jsonData = JSON.parse(data);
+    if (jsonData.mediaSource === "usb") return jsonData.usbLocation;
+    else return jsonData.localLocation;
+  },
+
   loadSubdirectories: async () => {
     // const data = fs.readFileSync(dataPath);
     const data = await fs.readFile(dataPath, "utf8");

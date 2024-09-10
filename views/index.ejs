@@ -13,49 +13,49 @@
   <div class="form-check form-switch">
     <input class="form-check-input" type="checkbox" role="switch" id="autoZoom" 
       <%= items.autoZoom ? "checked" : "" %> oninput="updateInput(event)">
-    <label class="form-check-label" for="autoZoom"><i class="bi bi-aspect-ratio"></i> Auto Zoom</label>
+    <label class="form-check-label" for="autoZoom"><i class="bi bi-aspect-ratio"></i> &nbsp;Auto Zoom</label>
   </div>
   <div class="form-check form-switch">
     <input class="form-check-input" type="checkbox" role="switch" id="autoRotate" 
       <%= items.autoRotate ? "checked" : "" %> oninput="updateInput(event)">
-    <label class="form-check-label" for="autoRotate"><i class="bi bi-arrow-clockwise"></i> Auto Rotate</label>
+    <label class="form-check-label" for="autoRotate"><i class="bi bi-arrow-clockwise"></i> &nbsp;Auto Rotate</label>
   </div>
   <div class="form-check form-switch">
     <input class="form-check-input" type="checkbox" role="switch" id="fullscreen" 
       <%= items.fullscreen ? "checked" : "" %> oninput="updateInput(event)">
-    <label class="form-check-label" for="fullscreen"><i class="bi bi-fullscreen"></i> Fullscreen</label>
+    <label class="form-check-label" for="fullscreen"><i class="bi bi-fullscreen"></i> &nbsp;Fullscreen</label>
   </div>
   <div class="form-check form-switch">
     <input class="form-check-input" type="checkbox" role="switch" id="randomise" 
       <%= items.randomise ? "checked" : "" %> oninput="updateInput(event)">
-    <label class="form-check-label" for="randomise"><i class="bi bi-shuffle"></i> Randomise</label>
+    <label class="form-check-label" for="randomise"><i class="bi bi-shuffle"></i> &nbsp;Randomise</label>
   </div>
   <div class="form-check form-switch">
     <input class="form-check-input" type="checkbox" role="switch" id="recursive" 
       <%= items.recursive ? "checked" : "" %> oninput="updateInput(event)">
-    <label class="form-check-label" for="recursive"><i class="bi bi-folder-check"></i> Recursive Search All Folders</label>
+    <label class="form-check-label" for="recursive"><i class="bi bi-folder-check"></i> &nbsp;Recursive Search All Folders</label>
   </div>
   <div class="form-check form-switch">
     <input class="form-check-input" type="checkbox" role="switch" id="borderless" 
       <%= items.borderless ? "checked" : "" %> oninput="updateInput(event)">
-    <label class="form-check-label" for="borderless"><i class="bi bi-border"></i> Borderless</label>
+    <label class="form-check-label" for="borderless"><i class="bi bi-border"></i> &nbsp;Borderless</label>
   </div>
   <div class="form-check form-switch">
     <input class="form-check-input" type="checkbox" role="switch" id="hidePointer" 
       <%= items.hidePointer ? "checked" : "" %> oninput="updateInput(event)">
-    <label class="form-check-label" for="hidePointer"><i class="bi bi-cursor"></i> Hide Pointer</label>
+    <label class="form-check-label" for="hidePointer"><i class="bi bi-cursor"></i> &nbsp;Hide Pointer</label>
   </div>
   <div class="form-check form-switch">
     <input class="form-check-input" type="checkbox" role="switch" id="hideError" checked disabled>
-    <label class="form-check-label" for="hideError"><i class="bi bi-bug"></i> Quiet No Error Reporting</label>
+    <label class="form-check-label" for="hideError"><i class="bi bi-bug"></i> &nbsp;Quiet No Error Reporting</label>
   </div>
   <div class="input-group mb-3">
-    <span class="input-group-text col-7"><i class="bi bi-stopwatch"></i> Slideshow Delay In Second</span>
+    <span class="input-group-text col-7"><i class="bi bi-stopwatch"></i> &nbsp;Slideshow Delay In Second</span>
     <input type="number" class="form-control" id="delayInSecond" placeholder="Enter a number" 
       value=<%= items.delayInSecond %> oninput="updateInput(event)">
   </div>
   <div class="input-group mb-3">
-    <label class="input-group-text col-7" for="imageBackground"><i class="bi bi-paint-bucket"></i> Background Color</label>
+    <label class="input-group-text col-7" for="imageBackground"><i class="bi bi-paint-bucket"></i> &nbsp;Background Color</label>
     <select class="form-select" id="imageBackground" oninput="updateInput(event)">
       <% for (var i = 0; i < items.bgColors.length; i++) { %>
       <option value=<%= items.bgColors[i].toLowerCase() %> 
@@ -65,7 +65,7 @@
     </select>
   </div>
   <div class="input-group mb-3">
-    <label class="input-group-text col-7" for="mediaSource"><i class="bi bi-usb-symbol"></i> Media Source</label>
+    <label class="input-group-text col-7" for="mediaSource"><i class="bi bi-usb-symbol"></i> &nbsp;Media Source</label>
     <select class="form-select" id="mediaSource" oninput="updateInput(event, true); toggleInput()" >
       <% for (var i = 0; i < items.sources.length; i++) { %>
       <option value=<%= items.sources[i].toLowerCase() %> 
@@ -76,7 +76,7 @@
   </div>
   <div id="usbContainer" style="display: none;">
     <div class="input-group mb-3" >
-      <span class="input-group-text col-7"><i class="bi bi-usb-drive"></i> Usb Location</span>
+      <span class="input-group-text col-7"><i class="bi bi-usb-drive"></i> &nbsp;Usb Location</span>
       <input type="text" class="form-control" id="usbLocation" placeholder="Enter a path" 
         value=<%= items.usbLocation %> onchange="updateInput(event, true)">
     </div>
@@ -105,7 +105,7 @@
   </div>
   <div id="localContainer" style="display: none;">
     <div class="input-group mb-3">
-      <span class="input-group-text col-7"><i class="bi bi-folder2-open"></i>  Local Location</span>
+      <span class="input-group-text col-7"><i class="bi bi-folder2-open"></i>  &nbsp;Local Location</span>
       <input type="text" class="form-control" id="localLocation" placeholder="Enter a path" 
         value=<%= items.localLocation %> onchange="updateInput(event, true)">
     </div>
@@ -123,7 +123,7 @@
               <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" role="switch" id="localFolder_<%= items.localSubdirs[i].id %>" 
                   <%= items.localSubdirs[i].show ? "checked" : "" %> oninput="updateFolder(event, <%= items.localSubdirs[i].id %>, true)">
-                <label class="form-check-label" for="localFolder_<%= items.localSubdirs[i].id %>"><i class="bi bi-folder-plus"></i> <%= items.localSubdirs[i].name %></label>
+                <label class="form-check-label" for="localFolder_<%= items.localSubdirs[i].id %>"><i class="bi bi-folder-plus"></i> &nbsp;<%= items.localSubdirs[i].name %></label>
               </div>
               <% } %>
             </div>
@@ -137,7 +137,7 @@
       <div class="accordion-item">
         <h2 class="accordion-header">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#fileTypes" aria-expanded="true" aria-controls="fileTypes">
-            <i class="bi bi-file-earmark-person"></i>&nbsp;Image File Extensions
+            <i class="bi bi-file-earmark-person"></i> &nbsp;Image File Extensions
           </button>
         </h2>
         <div id="fileTypes" class="accordion-collapse collapse" data-bs-parent="#accordionFileTypes">
@@ -147,7 +147,7 @@
               <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" role="switch" id="fileType_<%= items.imageTypes[i].id %>" 
                   <%= items.imageTypes[i].show ? "checked" : "" %> oninput="updateFileType(event, <%= items.imageTypes[i].id %>)">
-                <label class="form-check-label" for="fileType_<%= items.imageTypes[i].id %>"><i class="bi <%= items.imageTypes[i].css %>"></i> <%= items.imageTypes[i].name %></label>
+                <label class="form-check-label" for="fileType_<%= items.imageTypes[i].id %>"><i class="bi <%= items.imageTypes[i].css %>"></i> &nbsp;<%= items.imageTypes[i].name %></label>
               </div>
               <% } %>
             </div>
@@ -157,9 +157,9 @@
     </div>
   </div>
   <div class="row g-3 align-items-center" id="actionContainer">
-    <button type="button" onclick="restartSlideshow(event)" class="btn btn-primary text-dark-md"><i class="bi bi-bootstrap-reboot"></i> Restart</button>
-    <button type="button" onclick="stopSlideshow(event)" class="btn btn-secondary text-dark-md"><i class="bi bi-stop-circle"></i> Stop</button>
-    <button type="button" onclick="rebootDevice(event)" class="btn btn-danger text-dark-md"><i class="bi bi-tools"></i> Reboot Picture Frame</button>
+    <button type="button" onclick="restartSlideshow(event)" class="btn btn-primary text-dark-md"><i class="bi bi-bootstrap-reboot"></i> &nbsp;Restart</button>
+    <button type="button" onclick="stopSlideshow(event)" class="btn btn-secondary text-dark-md"><i class="bi bi-stop-circle"></i> &nbsp;Stop</button>
+    <button type="button" onclick="rebootDevice(event)" class="btn btn-danger text-dark-md"><i class="bi bi-tools"></i> &nbsp;Reboot Picture Frame</button>
   </div>
 </form>
 <% include partials/footer %>

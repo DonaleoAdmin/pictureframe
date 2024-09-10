@@ -102,3 +102,16 @@ footer {
 .accordion {
   padding-bottom: 20px !important;
 }
+
+#actionContainer {
+  padding: 0 8px;
+}
+
+[input]#fileInput::before {
+  font-family: 'FontAwesome';
+  content: '\f069'
+}
+
+.nav-item .active {
+    color: #007bff !important;
+}

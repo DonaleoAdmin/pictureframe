@@ -14,30 +14,32 @@ app.set("view engine", "ejs");
 app.use(bodyParser.json());
 
 // set path for static assets
-app.use(express.static(path.join(__dirname, "public")));
-app.use("/node_modules", express.static(path.join(__dirname, "node_modules")));
+// app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static('./public'));
+// app.use("/node_modules", express.static(path.join(__dirname, "node_modules")));
+app.use("/node_modules", express.static('./node_modules'));
 // app.use("/css", express.static(path.join(__dirname, "/public/css")));
 // app.use("/img", express.static(path.join(__dirname, "/public/img")));
 // app.use("/js", express.static(path.join(__dirname, "/public/js")));
 app.use(
   "/btcss",
-  express.static(path.join(__dirname, "/node_modules/bootstrap/dist/css"))
+  express.static("./node_modules/bootstrap/dist/css")
 );
 app.use(
   "/btjs",
-  express.static(path.join(__dirname, "/node_modules/bootstrap/dist/js"))
+  express.static("./node_modules/bootstrap/dist/js")
 );
 app.use(
   "/font",
-  express.static(path.join(__dirname, "/node_modules/bootstrap-icons/font"))
+  express.static("./node_modules/bootstrap-icons/font")
 );
 app.use(
   "/font",
-  express.static(path.join(__dirname + "/node_modules/bootstrap-icons/font"))
+  express.static("./node_modules/bootstrap-icons/font")
 );
 app.use(
   "/icons",
-  express.static(path.join(__dirname + "/node_modules/bootstrap-icons/icons"))
+  express.static("./node_modules/bootstrap-icons/icons")
 );
 
 // set routes
@@ -58,8 +60,9 @@ app.use(function (err, req, res, next) {
 });
 
 // const port = process.env.PORT || 3000;
-// app.listen(port, () => console.log(`Listening on port ${port}...`));
-// // app.set('port', port);
+const port = 3000;
+app.listen(port, () => console.log(`Listening on port ${port}...`));
+app.set("port", port);
 
 // app.get('/', (req, res) => {
 //     res.send('Hello World');
