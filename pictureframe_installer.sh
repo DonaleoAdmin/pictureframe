@@ -100,7 +100,7 @@ chmod +x pictureframe.sh
 # npm run start || { echo "npm run start failed"; exit 1; }
 
 # Display completion message
-echo "Installation and setup complete!"
+echo "Installation and setup completed!"
 
 # Restarting device
 sudo reboot || { echo "sudo reboot failed"; exit 1; }
