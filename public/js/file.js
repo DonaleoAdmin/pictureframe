@@ -13,7 +13,12 @@ function uploadImages() {
   // Manually append the directory field to the request header
   const directory = document.getElementById("directory").value;
   const uploadStatus = document.getElementById("uploadStatus");
+  const btnUpload = document.getElementById("btnUpload");
   //   formData.append("directory", directory);
+
+  btnUpload.setAttribute("disabled", "disabled");
+  btnUpload.innerHTML =
+    "<i class='spinner-grow spinner-grow-sm'></i> &nbsp;Uploading...";
 
   fetch("/uploadFiles", {
     method: "POST",
@@ -32,5 +37,9 @@ function uploadImages() {
       console.error("Error:", error);
       uploadStatus.className = "alert alert-danger";
       uploadStatus.innerHTML = "Upload failed!";
+    })
+    .finally(() => {
+      btnUpload.innerHTML = "<i class='bi bi-save'></i> &nbsp;Upload";
+      btnUpload.removeAttribute("disabled");
     });
 }
