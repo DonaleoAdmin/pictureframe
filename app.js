@@ -59,10 +59,11 @@ app.use(function (err, req, res, next) {
   res.render("error", { status: err.status, message: err.message });
 });
 
+// For Local and Debug run
 // const port = process.env.PORT || 3000;
-const port = 3000;
-app.listen(port, () => console.log(`Listening on port ${port}...`));
-app.set("port", port);
+// const port = 3000;
+// app.listen(port, () => console.log(`Listening on port ${port}...`));
+// app.set("port", port);
 
 // app.get('/', (req, res) => {
 //     res.send('Hello World');

@@ -107,11 +107,12 @@ footer {
   padding: 0 8px;
 }
 
-[input]#fileInput::before {
+/* [input]#fileInput::before {
   font-family: 'FontAwesome';
   content: '\f069'
-}
+} */
 
 .nav-item .active {
     color: #007bff !important;
+    font-size: 14px;
 }
