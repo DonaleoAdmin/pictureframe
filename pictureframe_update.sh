@@ -1,3 +1,7 @@
+# Remove PictureFrame app
+echo "Removing current PictureFrame app..."
+sudo rm -rf pictureframe
+
 # Clone the web application repository
 echo "Cloning the web application repository..."
 TARGET_DIR="pictureframe"
