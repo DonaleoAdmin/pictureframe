@@ -13,8 +13,8 @@ const {
   stopSlideshow,
   rebootDevice,
   startSlideshow,
-} = require("./utils");
-const { updateSlide } = require("./slideshow");
+} = require("./route-utils");
+const { updateSlide } = require("./route-slideshow");
 
 const dataPath = "./settings.json";
 

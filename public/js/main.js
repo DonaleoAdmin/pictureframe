@@ -29,7 +29,6 @@ function updateFileType(event, id) {
 }
 
 function loadFolders(id) {
-  console.log("loading folders...");
   fetch("/syncFolders", {
     method: "GET",
     headers: {
@@ -82,6 +81,32 @@ function loadFolders(id) {
     });
 }
 
+function loadFolder(name) {
+  executeApi(
+    "/update",
+    "POST",
+    { key: "selectedFolder", value: name },
+    false,
+    "/folder"
+  );
+}
+
+function reloadImage(img) {
+  if (!img.retryCount) {
+    img.retryCount = 1;
+  }
+
+  // Maximum retries before giving up
+  if (img.retryCount > 3) {
+    console.error(`Failed to load image: ${img.src}`);
+    return;
+  }
+
+  console.log(`Retrying to load image: ${img.src}, Attempt: ${img.retryCount}`);
+  img.src = img.src + "?" + new Date().getTime(); // Force reload by appending a timestamp
+  img.retryCount++;
+}
+
 function rebootDevice(event) {
   executeApi("/reboot", "POST", "");
 }
@@ -124,19 +149,44 @@ function toggleInput() {
   }
 }
 
+function toggleSelect(container) {
+  container.classList.toggle("selected");
+  updateFooter();
+}
+
+function updateFooter() {
+  const selectedContainers = document.querySelectorAll(
+    ".image-container.selected"
+  );
+  const footer = document.getElementById("popupFooter");
+
+  if (selectedContainers.length > 0) {
+    footer.style.display = "flex";
+  } else {
+    footer.style.display = "none";
+  }
+}
+
 // uri: /updateFolder, method: POST, data: { id: id, value: someValue }
-function executeApi(uri, method, data, isLoadFdr = false) {
+function executeApi(
+  uri,
+  method,
+  body,
+  isLoadFdr = false,
+  redirectRoute = null
+) {
   fetch(uri, {
     method: method,
     headers: {
       "Content-Type": "application/json",
     },
-    body: data ? JSON.stringify(data) : "",
+    body: body ? JSON.stringify(body) : "",
   })
     .then((response) => response.json())
     .then((data) => {
       console.log("Success:", data);
       if (isLoadFdr) loadFolders(data.id);
+      if (redirectRoute) window.location.href = redirectRoute;
     })
     .catch((error) => {
       console.error("Error:", error);

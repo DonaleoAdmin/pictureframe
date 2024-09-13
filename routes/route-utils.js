@@ -147,6 +147,12 @@ module.exports = {
     else return jsonData.localLocation;
   },
 
+  getSelectedFolder: async () => {
+    const data = await fs.readFile(dataPath, "utf8");
+    const jsonData = JSON.parse(data);
+    return jsonData.selectedFolder;
+  },
+
   loadSubdirectories: async () => {
     // const data = fs.readFileSync(dataPath);
     const data = await fs.readFile(dataPath, "utf8");

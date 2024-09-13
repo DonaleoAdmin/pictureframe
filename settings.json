@@ -18,7 +18,8 @@
   "localSubdirs": [
     { "id": 1, "name": "2022 Tet", "show": true },
     { "id": 2, "name": "2023 Europe", "show": true },
-    { "id": 3, "name": "Selections", "show": true }
+    { "id": 3, "name": "My Favorites", "show": true },
+    { "id": 4, "name": "Selections", "show": true }
   ],
   "imageTypes": [
     { "id": 1, "name": ".jpg", "css": "bi-filetype-jpg", "show": true },
@@ -27,5 +28,6 @@
     { "id": 4, "name": ".gif", "css": "bi-filetype-gif", "show": false },
     { "id": 5, "name": ".bmp", "css": "bi-filetype-bmp", "show": false },
     { "id": 6, "name": ".tiff", "css": "bi-filetype-ttf", "show": false }
-  ]
+  ],
+  "selectedFolder": "My Favorites"
 }

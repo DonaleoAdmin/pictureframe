@@ -6,12 +6,14 @@ const {
   saveSettings,
   getDefaultDir,
   loadSubdirectories,
-} = require("./utils");
-const settings = require("./settings.js");
-const uploads = require("./upload.js");
+} = require("./route-utils.js");
+const settings = require("./route-settings.js");
+const uploads = require("./route-upload.js");
+const folders = require("./route-folder.js");
 
 router.use(settings);
 router.use(uploads);
+router.use(folders);
 
 /* GET home page. */
 router.get("/", async function (req, res, next) {
@@ -34,6 +36,10 @@ router.get("/about", (req, res, next) => {
 
 router.get("/contact", (req, res, next) => {
   res.render("contact", { page: "Contact Us", menuId: "contact" });
+});
+
+router.get("/folder", (req, res, next) => {
+  res.render("folder", { page: "Folder Info", menuId: "folder" });
 });
 
 module.exports = router;

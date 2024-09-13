@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include partials/head %>
+</head>
+<body>
+    <% include partials/menu %>
+
+    <div class="container-fluid bg-3 text-center">
+         <h3><%= folderName %></h3><br>
+        <div class="gallery">
+            <% images.forEach(image => { %>
+                <div class="image-container" onclick="toggleSelect(this)">
+                    <img src="/images/<%= folderName %>/<%= image %>" alt="<%= image %>" 
+                        data-path="<%= folderName %>/<%= image %>" onerror="reloadImage(this)"/>
+                    <div class="checkmark">✔</div>
+                </div>
+            <% }) %>
+        </div>
+
+        <div class="popup-footer" id="popupFooter">
+            <button onclick="deleteSelected()"><i class="bi bi-trash3"></i></button>
+            <button onclick="downloadSelected()"><i class="bi bi-cloud-download"></i></button>
+            <button onclick="shareSelected()"><i class="bi bi-share-fill"></i></button>
+            <!-- Add more actions as needed -->
+        </div>
+    </div>
+    <% include partials/delete-modal %>
+    <% include partials/footer %>
+</body>
+<% include partials/script %>
+</html>
