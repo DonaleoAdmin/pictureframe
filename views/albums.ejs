@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <% include partials/head %> 
+</head>
+<body>
+<% include partials/menu %>
+
+<div class="container-fluid bg-3 text-center">    
+    <h3><%= page %></h3><br>
+    <div class="album-gallery">
+        <% randomImages.forEach(img => { %>
+            <div class="album-container" onclick="loadFolder('<%= img.folderName %>')" 
+                id="<%= img.id %>" data-name="<%= img.folderName %>">
+                <div class="image-preview">
+                    <img src="/images/<%= img.folderName %>/<%= img.image %>" alt="<%= img.image %>">
+                </div>
+                <div class="album-title"><%= img.folderName %></div>
+            </div>
+            <span class="album-menu-icon" onclick="openAlbumMenu('<%= img.id %>')"><i class="bi bi-three-dots-vertical"></i></span>
+        <% }) %>
+    </div>
+    <div class="popup-footer" id="popupFooter">
+        <button onclick="deleteAlbum()"><i class="bi bi-trash3"></i></button>
+        <button onclick="hideAlbum()"><i class="bi bi-eye-slash"></i></button>
+        <!-- Add more actions as needed -->
+    </div>
+</div>
+<% include partials/delete-modal %>
+<% include partials/footer %>
+</body>
+<% include partials/script %>
+</html>

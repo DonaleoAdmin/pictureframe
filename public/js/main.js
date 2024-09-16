@@ -81,16 +81,6 @@ function loadFolders(id) {
     });
 }
 
-function loadFolder(name) {
-  executeApi(
-    "/update",
-    "POST",
-    { key: "selectedFolder", value: name },
-    false,
-    "/folder"
-  );
-}
-
 function reloadImage(img) {
   if (!img.retryCount) {
     img.retryCount = 1;
@@ -149,24 +139,6 @@ function toggleInput() {
   }
 }
 
-function toggleSelect(container) {
-  container.classList.toggle("selected");
-  updateFooter();
-}
-
-function updateFooter() {
-  const selectedContainers = document.querySelectorAll(
-    ".image-container.selected"
-  );
-  const footer = document.getElementById("popupFooter");
-
-  if (selectedContainers.length > 0) {
-    footer.style.display = "flex";
-  } else {
-    footer.style.display = "none";
-  }
-}
-
 // uri: /updateFolder, method: POST, data: { id: id, value: someValue }
 function executeApi(
   uri,
@@ -196,3 +168,9 @@ function executeApi(
 function reload(id) {
   window.location.href = "/";
 }
+
+function goBack() {
+  // Using window history to go back to the previous page
+  window.history.back();
+}
+

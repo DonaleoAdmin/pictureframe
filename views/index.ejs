@@ -74,17 +74,19 @@
       <% } %>
     </select>
   </div>
+  <!-- Usb Location -->
   <div id="usbContainer" style="display: none;">
     <div class="input-group mb-3" >
       <span class="input-group-text col-7"><i class="bi bi-usb-drive"></i> &nbsp;Usb Location</span>
       <input type="text" class="form-control" id="usbLocation" placeholder="Enter a path" 
         value=<%= items.usbLocation %> onchange="updateInput(event, true)">
     </div>
-    <div class="accordion">
+    <!-- Albums -->
+    <div class="accordion" id="accordionUsb">
       <div class="accordion-item">
         <h2 class="accordion-header">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#usbPlaylist" aria-expanded="true" aria-controls="usbPlaylist">
-            <i class="bi bi-images"></i>&nbsp;Playlist Folders
+            <i class="bi bi-collection-play"></i>&nbsp;Playlist Albums
           </button>
         </h2>
         <div id="usbPlaylist" class="accordion-collapse collapse" data-bs-parent="#accordionUsb">
@@ -94,7 +96,7 @@
               <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" role="switch" id="usbFolder_<%= items.usbSubdirs[i].id %>" 
                   <%= items.usbSubdirs[i].show ? "checked" : "" %> oninput="updateFolder(event, <%= items.usbSubdirs[i].id %>, false)">
-                <label class="form-check-label" for="usbFolder_<%= items.usbSubdirs[i].id %>"><i class="bi bi-folder-plus"></i> <%= items.usbSubdirs[i].name %></label>
+                <label class="form-check-label" onclick="loadFolder('<%= items.usbSubdirs[i].name %>')"><i class="bi bi-folder-symlink"></i> <%= items.usbSubdirs[i].name %></label>
               </div>
               <% } %>
             </div>
@@ -103,35 +105,38 @@
       </div>
     </div>
   </div>
+  <!-- Local Location -->
   <div id="localContainer" style="display: none;">
     <div class="input-group mb-3">
       <span class="input-group-text col-7"><i class="bi bi-folder2-open"></i>  &nbsp;Local Location</span>
       <input type="text" class="form-control" id="localLocation" placeholder="Enter a path" 
         value=<%= items.localLocation %> onchange="updateInput(event, true)">
     </div>
-    <div class="accordion ">
-      <div class="accordion-item">
-        <h2 class="accordion-header">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#localPlaylist" aria-expanded="true" aria-controls="localPlaylist">
-            <i class="bi bi-images"></i>&nbsp;Playlist Folders
-          </button>
-        </h2>
-        <div id="localPlaylist" class="accordion-collapse collapse" data-bs-parent="#accordionLocal">
-          <div class="accordion-body">
-            <div id="localSubdirsContainer">
-              <% for (var i = 0; i < items.localSubdirs.length; i++) { %>
-              <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="localFolder_<%= items.localSubdirs[i].id %>" 
-                  <%= items.localSubdirs[i].show ? "checked" : "" %> oninput="updateFolder(event, <%= items.localSubdirs[i].id %>, true)">
-                <label class="form-check-label" onclick="loadFolder('<%= items.localSubdirs[i].name %>')"><i class="bi bi-folder-plus"></i> &nbsp;<%= items.localSubdirs[i].name %></label>
-              </div>
-              <% } %>
+    <!-- Albums -->
+  <div class="accordion " id="accordionLocal">
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#localPlaylist" aria-expanded="true" aria-controls="localPlaylist">
+          <i class="bi bi-collection-play"></i>&nbsp;Playlist Albums
+        </button>
+      </h2>
+      <div id="localPlaylist" class="accordion-collapse collapse" data-bs-parent="#accordionLocal">
+        <div class="accordion-body">
+          <div id="localSubdirsContainer">
+            <% for (var i = 0; i < items.localSubdirs.length; i++) { %>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" role="switch" id="localFolder_<%= items.localSubdirs[i].id %>" 
+                <%= items.localSubdirs[i].show ? "checked" : "" %> oninput="updateFolder(event, <%= items.localSubdirs[i].id %>, true)">
+              <label class="form-check-label" onclick="loadFolder('<%= items.localSubdirs[i].name %>')"><i class="bi bi-folder-symlink"></i> &nbsp;<%= items.localSubdirs[i].name %></label>
             </div>
+            <% } %>
           </div>
         </div>
       </div>
     </div>
   </div>
+  </div>
+  
   <div id="fileTypesContainer">
     <div class="accordion ">
       <div class="accordion-item">

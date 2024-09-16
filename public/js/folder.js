@@ -1,3 +1,12 @@
+$(document).ready(function () {
+  // Close fullscreen when user presses "Escape"
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      closeFullscreenMode();
+    }
+  });
+});
+
 function loadFolder(name) {
   executeApi(
     "/update",
@@ -8,14 +17,91 @@ function loadFolder(name) {
   );
 }
 
-function toggleSelect(container) {
-  container.classList.toggle("selected");
-  updateFooter();
+function openAlbumMenu(id) {
+  document.querySelectorAll(".album-container").forEach((container) => {
+    if (container.id == id) {
+      //   container.classList.add("selected");
+      toggleAlbumSelect(container);
+    } else {
+      container.classList.remove("selected");
+    }
+  });
 }
 
-function updateFooter() {
+function deleteAlbum() {
+  // Implement for future if handle for all selected Albums
+  const selectedFolders = [];
+
+  document
+    .querySelectorAll(".album-container.selected")
+    .forEach((container) => {
+      const id = container.id;
+      const folderName = container.getAttribute("data-name");
+      selectedFolders.push(folderName);
+    });
+
+  if (selectedFolders.length > 0) {
+    const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+
+    // Show the modal
+    const confirmDeleteModal = new bootstrap.Modal(
+      document.getElementById("confirmDeleteModal")
+    );
+    confirmDeleteModal.show();
+
+    // Attach event listener to the confirm delete button
+    confirmDeleteBtn.onclick = function () {
+      fetch("/delete-folders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ folders: selectedFolders }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            console.log("Deleted Folders:", selectedFolders);
+            confirmDeleteModal.hide(); // Hide the modal after deletion
+            window.location.reload();
+          } else {
+            console.log("Failed to delete folders");
+          }
+        });
+    };
+  } else {
+    console.log("No albums selected for deletion");
+  }
+}
+
+function toggleAlbumSelect(container) {
+  container.classList.toggle("selected");
+  updateFooter("album-container");
+}
+
+function toggleSelect(container) {
+  container.classList.toggle("selected");
+  allSelected = false;
+  updateFooter("image-container");
+}
+
+function toggleSelectAll() {
+  allSelected = !allSelected; // Toggle the selection state
+  // Upldate lable here if needed
+
+  document.querySelectorAll(".image-container").forEach((container) => {
+    if (allSelected) {
+      container.classList.add("selected");
+    } else {
+      container.classList.remove("selected");
+    }
+  });
+  updateFooter("image-container");
+}
+
+function updateFooter(containerName) {
   const selectedContainers = document.querySelectorAll(
-    ".image-container.selected"
+    `.${containerName}.selected`
   );
   const footer = document.getElementById("popupFooter");
 
@@ -24,6 +110,17 @@ function updateFooter() {
   } else {
     footer.style.display = "none";
   }
+}
+
+function getSelectedImages() {
+  let images = [];
+  document
+    .querySelectorAll(".image-container.selected")
+    .forEach((container) => {
+      const img = container.querySelector("img");
+      images.push(img);
+    });
+  return images;
 }
 
 function deleteSelected() {
@@ -45,7 +142,9 @@ function deleteSelected() {
     confirmDeleteBtn.onclick = function () {
       selectedContainers.forEach((container) => {
         const img = container.querySelector("img");
-        selectedImages.push(img.getAttribute("data-path"));
+        const folder = img.getAttribute("data-folder");
+        const imageName = img.getAttribute("data-image");
+        selectedImages.push(`${folder}/${imageName}`);
         container.remove(); // Remove the image from the DOM
       });
 
@@ -62,7 +161,7 @@ function deleteSelected() {
           .then((data) => {
             if (data.success) {
               console.log("Deleted Images:", selectedImages);
-              updateFooter(); // Update footer visibility
+              updateFooter("image-container"); // Update footer visibility
               confirmDeleteModal.hide(); // Hide the modal after deletion
             } else {
               console.log("Failed to delete images");
@@ -72,5 +171,190 @@ function deleteSelected() {
     };
   } else {
     console.log("No images selected for deletion");
+  }
+}
+
+function viewSelected() {
+  const mainNavbar = document.getElementById("mainNavbar");
+  const folderContainer = document.getElementById("folderContainer");
+  const fullscreenContainer = document.getElementById("fullscreenContainer");
+  const fullscreenImage = document.getElementById("fullscreenImage");
+  const prevArrow = document.getElementById("prevArrow");
+  const nextArrow = document.getElementById("nextArrow");
+  const closeFullscreen = document.getElementById("closeFullscreen");
+
+  const selectedImages = getSelectedImages();
+  currentIndex = 0;
+
+  //   selectedContainers.forEach((container) => {
+  //     const img = container.querySelector("img");
+  //     selectedImages.push(img);
+  //     // selectedImages.push(img.getAttribute("data-path"));
+
+  //     // if (img.requestFullscreen) {
+  //     //   img.requestFullscreen();
+  //     // } else if (img.mozRequestFullScreen) {
+  //     //   // Firefox
+  //     //   img.mozRequestFullScreen();
+  //     // } else if (img.webkitRequestFullscreen) {
+  //     //   // Chrome, Safari, Opera
+  //     //   img.webkitRequestFullscreen();
+  //     // } else if (img.msRequestFullscreen) {
+  //     //   // IE/Edge
+  //     //   img.msRequestFullscreen();
+  //     // }
+  //   });
+
+  mainNavbar.style.display = "none";
+  folderContainer.style.display = "none";
+  fullscreenImage.src = selectedImages[currentIndex].src;
+  fullscreenContainer.classList.add("show");
+
+  if (selectedImages.length > 1) {
+    nextArrow.style.display = "block";
+    prevArrow.style.display = "block";
+    prevArrow.addEventListener("click", () => showPrevImage(selectedImages));
+    nextArrow.addEventListener("click", () => showNextImage(selectedImages));
+  } else {
+    nextArrow.style.display = "none";
+    prevArrow.style.display = "none";
+  }
+  closeFullscreen.addEventListener("click", closeFullscreenMode);
+}
+
+// Function to close fullscreen
+function closeFullscreenMode() {
+  const mainNavbar = document.getElementById("mainNavbar");
+  const folderContainer = document.getElementById("folderContainer");
+  const fullscreenContainer = document.getElementById("fullscreenContainer");
+
+  currentIndex = 0;
+  fullscreenContainer.classList.remove("show");
+  mainNavbar.style.display = "block";
+  folderContainer.style.display = "block";
+
+  // Check if the document is in fullscreen mode before attempting to exit
+  if (
+    document.fullscreenElement ||
+    document.mozFullScreenElement ||
+    document.webkitFullscreenElement ||
+    document.msFullscreenElement
+  ) {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+      // Firefox
+      document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) {
+      // Chrome, Safari, Opera
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+      // IE/Edge
+      document.msExitFullscreen();
+    }
+  }
+}
+// Show previous image
+function showPrevImage(images) {
+  currentIndex = (currentIndex - 1 + images.length) % images.length;
+  fullscreenImage.src = images[currentIndex].src;
+}
+
+// Show next image
+function showNextImage(images) {
+  currentIndex = (currentIndex + 1) % images.length;
+  fullscreenImage.src = images[currentIndex].src;
+}
+
+async function downloadSelected() {
+  //   console.log("Sorry, it will be comming soon...");
+  const selectedImages = getSelectedImages();
+  for (let img of selectedImages) {
+    const folder = img.getAttribute("data-folder");
+    const imageName = img.getAttribute("data-image");
+    await downloadImage(folder, imageName);
+  }
+}
+
+// Function to download an image
+async function downloadImage(folder, imageName) {
+  const url = `/download-image/${folder}/${imageName}`;
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = imageName; // Trigger download
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+function shareSelected() {
+  const selectedImages = getSelectedImages();
+  if (navigator.share) {
+    navigator
+      .share({
+        title: "Shared Images",
+        text: "Check out these images:",
+        url: selectedImages.join(", "), // Share a specific link or the images as individual URLs
+      })
+      .then(() => console.log("Sharing was successful."))
+      .catch((error) => console.log("Error sharing:", error));
+  } else {
+    alert(
+      "Web Share API is not supported in your browser. Please try to download the image(s) first."
+    );
+  }
+}
+
+// Function to make the folder name editable
+function editFolderName() {
+  const display = document.getElementById("folderNameDisplay");
+  const input = document.getElementById("folderNameInput");
+  const icon = document.getElementById("editIcon");
+
+  // Hide the display and show the input field
+  display.style.display = "none";
+  input.style.display = "inline-block";
+  icon.style.display = "none";
+  input.focus(); // Automatically focus on the input
+}
+
+// Function to save the folder name (when focus is lost or Enter key is pressed)
+function saveFolderName() {
+  const display = document.getElementById("folderNameDisplay");
+  const input = document.getElementById("folderNameInput");
+  const icon = document.getElementById("editIcon");
+
+  const oldFolderName = display.textContent;
+  const newFolderName = input.value;
+  display.textContent = newFolderName;
+
+  // Hide the input and show the display
+  input.style.display = "none";
+  display.style.display = "inline-block";
+  icon.style.display = "inline-block";
+
+  // Don't do anything if the album name hasn't changed
+  if (oldFolderName === newFolderName) return;
+
+  // Send the new folder name to the server
+  fetch("/update-folder-name", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ oldFolderName, newFolderName }),
+  }).then((response) => {
+    if (response.ok) {
+      console.log("Folder name updated successfully");
+    } else {
+      console.error("Error updating folder name");
+    }
+  });
+}
+
+// Function to handle keypress (Enter key)
+function handleKeyPress(event) {
+  if (event.key === "Enter") {
+    saveFolderName();
   }
 }
