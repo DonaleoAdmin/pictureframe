@@ -1,4 +1,6 @@
 const express = require("express");
+const https = require("https");
+const fs = require("fs");
 const path = require("path");
 // const http = require('http');
 const bodyParser = require("body-parser");
@@ -15,35 +17,26 @@ app.use(bodyParser.json());
 
 // set path for static assets
 // app.use(express.static(path.join(__dirname, "public")));
-app.use(express.static('./public'));
+app.use(express.static("./public"));
 // app.use("/node_modules", express.static(path.join(__dirname, "node_modules")));
-app.use("/node_modules", express.static('./node_modules'));
+app.use("/node_modules", express.static("./node_modules"));
 // app.use("/css", express.static(path.join(__dirname, "/public/css")));
 // app.use("/img", express.static(path.join(__dirname, "/public/img")));
 // app.use("/js", express.static(path.join(__dirname, "/public/js")));
-app.use(
-  "/btcss",
-  express.static("./node_modules/bootstrap/dist/css")
-);
-app.use(
-  "/btjs",
-  express.static("./node_modules/bootstrap/dist/js")
-);
-app.use(
-  "/font",
-  express.static("./node_modules/bootstrap-icons/font")
-);
-app.use(
-  "/font",
-  express.static("./node_modules/bootstrap-icons/font")
-);
-app.use(
-  "/icons",
-  express.static("./node_modules/bootstrap-icons/icons")
-);
+app.use("/btcss", express.static("./node_modules/bootstrap/dist/css"));
+app.use("/btjs", express.static("./node_modules/bootstrap/dist/js"));
+app.use("/font", express.static("./node_modules/bootstrap-icons/font"));
+app.use("/font", express.static("./node_modules/bootstrap-icons/font"));
+app.use("/icons", express.static("./node_modules/bootstrap-icons/icons"));
 
 // set routes
 app.use("/", index);
+
+// SSL options
+const sslOptions = {
+  key: fs.readFileSync("server.key"),
+  cert: fs.readFileSync("server.cert"),
+};
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -57,6 +50,11 @@ app.use(function (err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render("error", { status: err.status, message: err.message });
+});
+
+// Create an HTTPS server
+https.createServer(sslOptions, app).listen(3000, () => {
+  console.log("HTTPS Server running on https://localhost:3000");
 });
 
 // For Local and Debug run
