@@ -8,39 +8,75 @@ $(document).ready(function () {
 });
 
 function loadFolder(name) {
-  executeApi(
-    "/update",
-    "POST",
-    { key: "selectedFolder", value: name },
-    false,
-    "/folder"
-  );
+  updateFolderSetting(name, "/folder");
 }
 
 function openAlbumMenu(id) {
   document.querySelectorAll(".album-container").forEach((container) => {
-    if (container.id == id) {
+    if (container.id === id) {
       //   container.classList.add("selected");
+      const name = container.getAttribute("data-name");
+      const show =
+        container.getAttribute("data-show") === "true" ? true : false;
       toggleAlbumSelect(container);
+      updateFolderSetting(name, "");
+      toggleShowIcon(show);
     } else {
       container.classList.remove("selected");
     }
   });
 }
 
-function deleteAlbum() {
-  // Implement for future if handle for all selected Albums
-  const selectedFolders = [];
+function toggleShowIcon(show) {
+  // Update eye icon
+  const iconEye = document.getElementById("iconEye");
 
+  // Toggle between 'bi-eye' and 'bi-eye-slash'
+  if (iconEye.classList.contains("bi-eye-slash") && !show) {
+    iconEye.classList.remove("bi-eye-slash");
+    iconEye.classList.add("bi-eye");
+  } else {
+    iconEye.classList.remove("bi-eye");
+    iconEye.classList.add("bi-eye-slash");
+  }
+}
+
+function updateFolderSetting(value, route) {
+  executeApi(
+    "/update",
+    "POST",
+    { key: "selectedFolder", value: value },
+    false,
+    route
+  );
+}
+
+function updateSubDirSetting(id) {
+  executeApi("/updateFolder", "POST", {
+    id: id,
+    value: inputValue,
+    isLocal: isLocal,
+  });
+}
+
+function getSelectedAlbums() {
+  const selectedAlbums = [];
   document
     .querySelectorAll(".album-container.selected")
     .forEach((container) => {
       const id = container.id;
-      const folderName = container.getAttribute("data-name");
-      selectedFolders.push(folderName);
+      const name = container.getAttribute("data-name");
+      const show = container.getAttribute("data-show");
+      selectedAlbums.push({ id, name, show });
     });
+  return selectedAlbums;
+}
 
-  if (selectedFolders.length > 0) {
+function deleteAlbum() {
+  // Implement for future if handle for all selected Albums
+  const selectedAlbums = getSelectedAlbums();
+
+  if (selectedAlbums.length > 0) {
     const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
 
     // Show the modal
@@ -56,12 +92,12 @@ function deleteAlbum() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ folders: selectedFolders }),
+        body: JSON.stringify({ folders: selectedAlbums }),
       })
         .then((response) => response.json())
         .then((data) => {
           if (data.success) {
-            console.log("Deleted Folders:", selectedFolders);
+            console.log("Deleted Folders:", selectedAlbums);
             confirmDeleteModal.hide(); // Hide the modal after deletion
             window.location.reload();
           } else {
@@ -72,6 +108,24 @@ function deleteAlbum() {
   } else {
     console.log("No albums selected for deletion");
   }
+}
+
+function updateShowAlbum() {
+  const albumNames = getSelectedAlbums();
+
+  albumNames.forEach((folder) => {
+    const newShow = folder.show === "true" ? false : true;
+    toggleShowIcon(newShow);
+
+    const container = document.getElementById(folder.id);
+    container.setAttribute("data-show", newShow.toString());
+
+    // Update settings
+    executeApi("/updateFolder", "POST", {
+      id: folder.id,
+      value: newShow,
+    });
+  });
 }
 
 function toggleAlbumSelect(container) {

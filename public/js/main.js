@@ -156,7 +156,7 @@ function executeApi(
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log("Success:", data);
+      // console.log("Success:", data);
       if (isLoadFdr) loadFolders(data.id);
       if (redirectRoute) window.location.href = redirectRoute;
     })

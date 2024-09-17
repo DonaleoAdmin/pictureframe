@@ -13,6 +13,7 @@ const {
   stopSlideshow,
   rebootDevice,
   startSlideshow,
+  isLocalSource,
 } = require("./route-utils");
 const { updateSlide } = require("./route-slideshow");
 
@@ -39,7 +40,13 @@ settingsRoutes.post("/update", async (req, res) => {
 });
 
 settingsRoutes.post("/updateFolder", async (req, res) => {
-  const { id, value, isLocal } = req.body;
+  const { id, value, local } = req.body;
+
+  let isLocal = local;
+  if (isLocal === null || isLocal === undefined) {
+    isLocal = await isLocalSource();
+  }
+  console.log("isLocal:", id);
 
   // Update folder settings
   await updateFolderSettings(id, value, isLocal);

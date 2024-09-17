@@ -29,5 +29,5 @@
     { "id": 5, "name": ".bmp", "css": "bi-filetype-bmp", "show": false },
     { "id": 6, "name": ".tiff", "css": "bi-filetype-ttf", "show": false }
   ],
-  "selectedFolder": "2022 Tet"
+  "selectedFolder": "My Favorites"
 }

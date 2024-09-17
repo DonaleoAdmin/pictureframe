@@ -1,7 +1,11 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
-const { getDefaultDir, getSelectedFolder } = require("./route-utils");
+const {
+  getDefaultDir,
+  getSelectedFolder,
+  getFolderSubdir,
+} = require("./route-utils");
 const routeFolder = express.Router();
 
 let baseDir;
@@ -20,7 +24,7 @@ initialize();
 function getRandomImageFromFolder(folderPath) {
   const images = fs.readdirSync(folderPath).filter((file) => {
     // Filter for image files (adjust extensions as needed)
-    return file.match(/\.(jpg|jpeg|png|gif)$/i);
+    return file.match(/\.(jpg|jpeg|png|gif|bmp|tiff)$/i);
   });
 
   if (images.length === 0) return null; // Return null if no images are found
@@ -29,23 +33,29 @@ function getRandomImageFromFolder(folderPath) {
 }
 
 // Function to get random images from each folder in the base directory
-function getRandomImagesFromFolders() {
+async function getRandomImagesFromFolders() {
   const folders = fs.readdirSync(baseDir).filter((folder) => {
     // Check if it's a directory
     return fs.statSync(path.join(baseDir, folder)).isDirectory();
   });
 
-  // Create an array with folder names and random image for each folder
-  const randomImages = folders.map((folder, index) => {
-    const folderId = `folder${++index}`;
-    const folderPath = path.join(baseDir, folder);
-    const randomImage = getRandomImageFromFolder(folderPath);
-    return {
-      id: folderId,
-      folderName: folder,
-      image: randomImage,
-    };
-  });
+  // Use Promise.all to handle asynchronous calls in map
+  const randomImages = await Promise.all(
+    folders.map(async (folder, index) => {
+      const folderId = ++index;
+      const folderPath = path.join(baseDir, folder);
+
+      // Await the getFolderSubdir call
+      const folderSubdir = await getFolderSubdir(folder);
+      const randomImage = getRandomImageFromFolder(folderPath);
+      return {
+        id: folderId,
+        folderName: folder,
+        image: randomImage,
+        show: folderSubdir?.show,
+      };
+    })
+  );
 
   // Filter out folders with no images
   return randomImages.filter((img) => img.image !== null);
@@ -160,7 +170,7 @@ routeFolder.post("/delete-folders", (req, res) => {
 
   let success = true;
   folders.forEach((folder) => {
-    success = deleteFolderSync(path.join(baseDir, folder));
+    success = deleteFolderSync(path.join(baseDir, folder.name));
   });
 
   if (success) {

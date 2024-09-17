@@ -100,9 +100,11 @@ module.exports = {
       // Update specific folder
       let folder;
       if (isLocal) {
-        folder = jsonData.localSubdirs.find((f) => f.id === id);
+        folder = jsonData.localSubdirs.find(
+          (f) => f.id === +id || f.name === id
+        );
       } else {
-        folder = jsonData.usbSubdirs.find((f) => f.id === id);
+        folder = jsonData.usbSubdirs.find((f) => f.id === +id || f.name === id);
       }
 
       if (folder) {
@@ -140,17 +142,37 @@ module.exports = {
     }
   },
 
+  isLocalSource: async () => {
+    const data = await fs.readFile(dataPath, "utf8");
+    const jsonData = JSON.parse(data);
+    return jsonData.mediaSource === "usb" ? false : true;
+  },
+
   getDefaultDir: async () => {
     const data = await fs.readFile(dataPath, "utf8");
     const jsonData = JSON.parse(data);
-    if (jsonData.mediaSource === "usb") return jsonData.usbLocation;
-    else return jsonData.localLocation;
+    if (jsonData.mediaSource === "usb") {
+      return jsonData.usbLocation;
+    } else {
+      return jsonData.localLocation;
+    }
   },
 
   getSelectedFolder: async () => {
     const data = await fs.readFile(dataPath, "utf8");
     const jsonData = JSON.parse(data);
     return jsonData.selectedFolder;
+  },
+
+  getFolderSubdir: async (folder) => {
+    const data = await fs.readFile(dataPath, "utf8");
+    const jsonData = JSON.parse(data);
+
+    const local = jsonData.mediaSource === "usb" ? false : true;
+    const subdirs = local ? jsonData.localSubdirs : jsonData.usbSubdirs;
+    // jsonData.selectedFolder;
+    const subdir = subdirs.find((f) => f.name === folder);
+    return subdir;
   },
 
   loadSubdirectories: async () => {
