@@ -88,6 +88,10 @@ EOF'
 echo "Change directory to pictureframe..."
 cd pictureframe || { echo "Failed to change directory to pictureframe"; exit 1; }
 
+# Install PM2
+echo "Installing pm2..."
+npm install pm2 -g || { echo "pm2 installation failed"; exit 1; }
+
 # Install npm dependencies
 echo "Installing npm dependencies..."
 npm install || { echo "npm install failed"; exit 1; }

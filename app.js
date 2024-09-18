@@ -32,11 +32,11 @@ app.use("/icons", express.static("./node_modules/bootstrap-icons/icons"));
 // set routes
 app.use("/", index);
 
-// SSL options
-const sslOptions = {
-  key: fs.readFileSync("server.key"),
-  cert: fs.readFileSync("server.cert"),
-};
+// // SSL options
+// const sslOptions = {
+//   key: fs.readFileSync("server.key"),
+//   cert: fs.readFileSync("server.cert"),
+// };
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -52,8 +52,10 @@ app.use(function (err, req, res, next) {
   res.render("error", { status: err.status, message: err.message });
 });
 
+// THE SERVER INFORMATION IS BEING SET IN THE WWW file
+
 // Create an HTTPS server
-https.createServer(sslOptions, app);
+// https.createServer(sslOptions, app);
 // https.createServer(sslOptions, app).listen(3000, () => {
 //   console.log("HTTPS Server running on https://localhost:3000");
 // });

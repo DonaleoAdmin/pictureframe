@@ -19,6 +19,14 @@ sudo chown -R "$CURRENT_USER":"$CURRENT_USER" "$TARGET_DIR"
 
 echo "Repository cloned and ownership changed to $CURRENT_USER."
 
+# Change to the web app directory
+echo "Change directory to pictureframe..."
+cd pictureframe || { echo "Failed to change directory to pictureframe"; exit 1; }
+
+# Install PM2
+echo "Installing pm2..."
+npm install pm2 -g || { echo "pm2 installation failed"; exit 1; }
+
 # Display completion message
 echo "Update completed!"
 
