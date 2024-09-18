@@ -53,9 +53,10 @@ app.use(function (err, req, res, next) {
 });
 
 // Create an HTTPS server
-https.createServer(sslOptions, app).listen(3000, () => {
-  console.log("HTTPS Server running on https://localhost:3000");
-});
+https.createServer(sslOptions, app);
+// https.createServer(sslOptions, app).listen(3000, () => {
+//   console.log("HTTPS Server running on https://localhost:3000");
+// });
 
 // For Local and Debug run
 // const port = process.env.PORT || 3000;
