@@ -237,7 +237,7 @@ function viewSelected() {
   const nextArrow = document.getElementById("nextArrow");
   const closeFullscreen = document.getElementById("closeFullscreen");
 
-  const selectedImages = getSelectedImages();
+  let selectedImages = getSelectedImages();
   currentIndex = 0;
 
   //   selectedContainers.forEach((container) => {
@@ -267,8 +267,12 @@ function viewSelected() {
   if (selectedImages.length > 1) {
     nextArrow.style.display = "block";
     prevArrow.style.display = "block";
-    prevArrow.addEventListener("click", () => showPrevImage(selectedImages));
-    nextArrow.addEventListener("click", () => showNextImage(selectedImages));
+
+    prevArrow.removeEventListener("click", showPrevImage);
+    prevArrow.addEventListener("click", showPrevImage);
+
+    nextArrow.removeEventListener("click", showNextImage);
+    nextArrow.addEventListener("click", showNextImage);
   } else {
     nextArrow.style.display = "none";
     prevArrow.style.display = "none";
@@ -308,14 +312,17 @@ function closeFullscreenMode() {
     }
   }
 }
+
 // Show previous image
-function showPrevImage(images) {
+function showPrevImage() {
+  const images = getSelectedImages();
   currentIndex = (currentIndex - 1 + images.length) % images.length;
   fullscreenImage.src = images[currentIndex].src;
 }
 
 // Show next image
-function showNextImage(images) {
+function showNextImage() {
+  const images = getSelectedImages();
   currentIndex = (currentIndex + 1) % images.length;
   fullscreenImage.src = images[currentIndex].src;
 }

@@ -411,7 +411,7 @@ footer {
 .nav-arrow {
   position: absolute;
   top: 50%;
-  font-size: 50px;
+  font-size: 30px;
   color: #0a58ca;
   cursor: pointer;
   user-select: none;
