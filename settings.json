@@ -12,8 +12,8 @@
   "bgColors": ["Black", "White", "Blue"],
   "mediaSource": "local-drive",
   "sources": ["Usb", "Local-Drive"],
-  "usbLocation": "/media",
-  "localLocation": "/home/pi/Pictures",
+  "usbLocation": "C:/media",
+  "localLocation": "C:/home/pi/Pictures",
   "usbSubdirs": [],
   "localSubdirs": [
     { "id": 1, "name": "2022 Tet", "show": true },
@@ -29,5 +29,5 @@
     { "id": 5, "name": ".bmp", "css": "bi-filetype-bmp", "show": false },
     { "id": 6, "name": ".tiff", "css": "bi-filetype-ttf", "show": false }
   ],
-  "selectedFolder": "My Favorites"
+  "selectedFolder": "2022 Tet"
 }

@@ -349,13 +349,18 @@ async function downloadImage(folder, imageName) {
 }
 
 function shareSelected() {
-  const selectedImages = getSelectedImages();
+  const imagePaths = [];
+  getSelectedImages().forEach((img) => {
+    const src = img.src;
+    imagePaths.push(src);
+  });
+  //   console.log(imagePaths.join("; \n"));
   if (navigator.share) {
     navigator
       .share({
         title: "Shared Images",
         text: "Check out these images:",
-        url: selectedImages.join(", "), // Share a specific link or the images as individual URLs
+        url: imagePaths.join("; \n"), // Share a specific link or the images as individual URLs
       })
       .then(() => console.log("Sharing was successful."))
       .catch((error) => console.log("Error sharing:", error));
