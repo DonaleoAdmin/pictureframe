@@ -12,8 +12,8 @@
   "bgColors": ["Black", "White", "Blue"],
   "mediaSource": "local-drive",
   "sources": ["Usb", "Local-Drive"],
-  "usbLocation": "C:/media",
-  "localLocation": "C:/home/pi/Pictures",
+  "usbLocation": "/media",
+  "localLocation": "/home/pi/Pictures",
   "usbSubdirs": [],
   "localSubdirs": [
     { "id": 1, "name": "2022 Tet", "show": true },
