@@ -15,6 +15,9 @@ echo "Installing Node.js and npm..."
 # curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
 sudo apt install nodejs
 
+echo "Installing npm..."
+sudo apt install npm -y
+
 # Clone the web application repository
 echo "Cloning the web application repository..."
 TARGET_DIR="pictureframe"
