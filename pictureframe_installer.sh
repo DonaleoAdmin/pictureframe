@@ -117,7 +117,7 @@ npm install || { echo "npm install failed"; exit 1; }
 # echo "Granting permission for pictureframe.sh..."
 # chmod +x pictureframe.sh
 
-
+chmod +x /home/pi/pictureframe/slideshow.py
 
 # echo "Starting PictureFrame..."
 # npm run start || { echo "npm run start failed"; exit 1; }
