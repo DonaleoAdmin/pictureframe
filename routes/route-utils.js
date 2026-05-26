@@ -300,7 +300,7 @@ module.exports = {
   },
 
   rebootDevice: () => {
-    exec("sudo reboot", (error, stdout, stderr) => {
+    exec("sudo systemctl reboot", (error, stdout, stderr) => {
       if (error) {
         console.error(`Error executing reboot: ${error}`);
         // return res.status(500).send("Failed to reboot");
