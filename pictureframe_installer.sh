@@ -64,6 +64,8 @@ Exec=/home/pi/pictureframe/startup.sh
 X-GNOME-Autostart-enabled=true
 EOF
 
+chmod +x /home/pi/.config/autostart/pictureframe.desktop
+
 # Make startup script executable
 chmod +x /home/pi/pictureframe/startup.sh
 
