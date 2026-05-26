@@ -74,6 +74,20 @@ chmod +x /home/pi/pictureframe/startup.sh
 
 echo "Desktop autostart created successfully."
 
+# Add NOPASSWD entry for reboot command
+echo "Adding NOPASSWD entry for reboot command..."
+SUDO_FILE="/etc/sudoers.d/pictureframe"
+
+echo "$CURRENT_USER ALL=(ALL) NOPASSWD: /bin/systemctl reboot" | \
+sudo tee "$SUDO_FILE" > /dev/null
+
+sudo chmod 440 "$SUDO_FILE"
+
+# Validate syntax
+sudo visudo -cf "$SUDO_FILE"
+
+echo "NOPASSWD reboot permission added successfully."
+
 # Install Nginx
 echo "Installing Nginx..."
 sudo apt update
