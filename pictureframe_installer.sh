@@ -38,19 +38,36 @@ echo "Repository cloned and ownership changed to $CURRENT_USER."
 
 # Edit wayfire.ini and append new lines
 # Define the lines to be appended
-new_lines="[autostart]
-1 = chmod +x ~/pictureframe/pictureframe.sh
-2 = ~/pictureframe/pictureframe.sh
-3 = python3 ~/pictureframe/slideshow.py"
+# new_lines="[autostart]
+# 1 = chmod +x ~/pictureframe/pictureframe.sh
+# 2 = ~/pictureframe/pictureframe.sh
+# 3 = python3 ~/pictureframe/slideshow.py"
 
 # Remove existing [autostart] section if it exists
-sudo sed -i '/^\[autostart\]/,/^$/d' ~/.config/wayfire.ini
+# sudo sed -i '/^\[autostart\]/,/^$/d' ~/.config/wayfire.ini
 
 # Append the new lines to wayfire.ini
-echo "$new_lines" | sudo tee -a ~/.config/wayfire.ini > /dev/null
+# echo "$new_lines" | sudo tee -a ~/.config/wayfire.ini > /dev/null
 
 # Display a message indicating the completion of the task
-echo "Commands successfully appended to wayfire.ini"
+# echo "Commands successfully appended to wayfire.ini"
+
+# Create autostart directory
+mkdir -p /home/pi/.config/autostart
+
+# Create pictureframe.desktop
+cat > /home/pi/.config/autostart/pictureframe.desktop << 'EOF'
+[Desktop Entry]
+Type=Application
+Name=PictureFrame
+Exec=/home/pi/pictureframe/startup.sh
+X-GNOME-Autostart-enabled=true
+EOF
+
+# Make startup script executable
+chmod +x /home/pi/pictureframe/startup.sh
+
+echo "Desktop autostart created successfully."
 
 # Install Nginx
 echo "Installing Nginx..."
@@ -97,8 +114,10 @@ echo "Installing npm dependencies..."
 npm install || { echo "npm install failed"; exit 1; }
 
 # Granting permission for scripts
-echo "Granting permission for pictureframe.sh..."
-chmod +x pictureframe.sh
+# echo "Granting permission for pictureframe.sh..."
+# chmod +x pictureframe.sh
+
+
 
 # echo "Starting PictureFrame..."
 # npm run start || { echo "npm run start failed"; exit 1; }

@@ -42,8 +42,11 @@ sudo apt remove feh -y
 
 # Remove entries in the wayfire.ini
 # Remove existing [autostart] section if it exists
-echo "Removing entries in the wayfire.ini..."
-sudo sed -i '/^\[autostart\]/,/^$/d' ~/.config/wayfire.ini
+# echo "Removing entries in the wayfire.ini..."
+# sudo sed -i '/^\[autostart\]/,/^$/d' ~/.config/wayfire.ini
+
+echo "Removing autostart desktop entry..."
+sudo rm -rf /home/pi/.config/autostart/pictureframe.desktop
 
 echo "Uninstallation of the PictureFrame app and related componments have been completed."
 echo "The system will reboot now!"
